@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lista Doctorilor</title>
+  <style>
+        .doctor-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+        }
+        .doctor-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .doctor-details {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<h1>Lista Doctorilor</h1>
+<div th:each="doctor : ${doctors}">
+  <div class="doctor-box">
+    <img class="doctor-image" th:src="${doctor.profileImage}" alt="Doctor Image"/>
+    <div class="doctor-details">
+      <p><strong>Name: </strong><span th:text="${doctor.lastName + ' ' + doctor.firstName}"></span></p>
+      <p><strong>Hospital: </strong><span th:text="${doctor.hospitalProfile.name}"></span></p>
+      <p><strong>Age: </strong><span th:text="${T(java.time.LocalDate).now().getYear() - doctor.birthDate.getYear()}"></span></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
