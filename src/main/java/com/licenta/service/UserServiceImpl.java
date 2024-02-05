@@ -1,27 +1,26 @@
 package com.licenta.service;
 
+import com.licenta.dto.DoctorDto;
 import com.licenta.dto.HospitalProfileDto;
 import com.licenta.dto.PharmacyDto;
-import com.licenta.dto.RegistrationAndRoleDto;
 import com.licenta.dto.RegistrationDto;
-import com.licenta.entity.HospitalProfile;
-import com.licenta.entity.PharmacyProfile;
-import com.licenta.entity.Role;
-import com.licenta.entity.User;
-import com.licenta.repository.HospitalProfileRepository;
-import com.licenta.repository.PharmacyProfileRepository;
-import com.licenta.repository.RoleRepository;
-import com.licenta.repository.UserRepository;
+import com.licenta.entity.*;
+import com.licenta.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
@@ -30,7 +29,12 @@ public class UserServiceImpl implements UserService {
     private HospitalProfileRepository hospitalProfileRepository;
 
     @Autowired
+    private DoctorProfileRepository doctorProfileRepository;
+
+    @Autowired
     private PharmacyProfileRepository pharmacyProfileRepository;
+
+
 
     @Autowired
     public void UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
@@ -49,35 +53,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-//    @Override
-//    public void saveHospitalOrPharmacy(RegistrationAndRoleDto registrationAndRoleDto){
-//        User user = new User();
-//        user.setEmail(registrationAndRoleDto.getEmail());
-//        user.setPassword(passwordEncoder.encode((registrationAndRoleDto.getPassword())));
-//        Role role = roleRepository.findByName(registrationAndRoleDto.getRole());
-//        user.setRole(role);
-//        userRepository.save(user);
-//    }
-
-//    @Override
-//    public void saveHospitalUserAndProfile(HospitalProfileDto hospitalProfileDto){
-//        User user = new User();
-//        user.setEmail(hospitalProfileDto.getEmail());
-//        user.setPassword(passwordEncoder.encode(hospitalProfileDto.getPassword()));
-//        Role role = roleRepository.findByName("HOSPITAL");
-//        user.setRole(role);
-//        userRepository.save(user);
-//
-//
-//        HospitalProfile hospitalProfile = new HospitalProfile();
-//        hospitalProfile.setName(hospitalProfileDto.getName());
-//        hospitalProfile.setCity(hospitalProfileDto.getCity());
-//        hospitalProfile.setCountry(hospitalProfileDto.getCountry());
-//        hospitalProfile.setAddress(hospitalProfileDto.getAddress());
-//        hospitalProfile.setProfileImage(hospitalProfileDto.getProfileImage());
-//        hospitalProfile.setUser(user);
-//        hospitalProfileRepository.save(hospitalProfile);
-//    }
 
     @Override
     public void saveHospitalUserAndProfile(HospitalProfileDto hospitalProfileDto){
@@ -121,13 +96,57 @@ public class UserServiceImpl implements UserService {
         pharmacyProfile.setCity(pharmacyDto.getCity());
         pharmacyProfile.setCountry(pharmacyDto.getCountry());
         pharmacyProfile.setAddress(pharmacyDto.getAddress());
-        pharmacyProfile.setProfileImage(pharmacyDto.getProfileImage());
         pharmacyProfile.setUser(user);
-        pharmacyProfileRepository.save(pharmacyProfile);
+
+        MultipartFile file = pharmacyDto.getProfileImage();
+        try{
+            if(file!=null && !file.isEmpty()){
+                pharmacyProfile.setProfileImage(file.getBytes());
+            }
+            pharmacyProfileRepository.save(pharmacyProfile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void saveDoctorUserAndProfile(DoctorDto doctorDto) {
+        User user = new User();
+        user.setEmail(doctorDto.getEmail());
+        user.setPassword(passwordEncoder.encode(doctorDto.getPassword()));
+        Role role = roleRepository.findByName("DOCTOR");
+        user.setRole(role);
+        userRepository.save(user);
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userLoggedIn = userRepository.findByEmail(authentication.getName());
+
+        HospitalProfile hospitalProfile = hospitalProfileRepository.findByUserId(userLoggedIn.getId());
+
+        DoctorProfile doctorProfile = new DoctorProfile();
+        doctorProfile.setHospitalProfile(hospitalProfile);
+        doctorProfile.setSpecialty(doctorDto.getSpecialty());
+        doctorProfile.setBirthday(doctorDto.getBirthday());
+        doctorProfile.setNationality(doctorDto.getNationality());
+        doctorProfile.setFirstName(doctorDto.getFirstName());
+        doctorProfile.setUser(user);
+        doctorProfile.setLastName(doctorDto.getLastName());
+
+        MultipartFile file = doctorDto.getProfileImage();
+        try{
+            if(file!=null && !file.isEmpty()){
+                doctorProfile.setProfileImage(file.getBytes());
+            }
+            doctorProfileRepository.save(doctorProfile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
 }

@@ -1,15 +1,11 @@
 package com.licenta.dto;
 
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
 
 @Data
 public class HospitalProfileDto {
@@ -37,7 +33,6 @@ public class HospitalProfileDto {
     @NotNull
     @NotBlank
     private String country;
-
 
     private MultipartFile profileImage;
 

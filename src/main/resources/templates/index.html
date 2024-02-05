@@ -11,7 +11,11 @@
 </head>
 <body>
 
-    <div th:replace="~{header::header}"></div>
+    <div>
+        <header>
+            <div th:replace="~{header :: header}">...</div>
+        </header>
+    </div>
 
 
     <!-- Link catre stickere-->
@@ -20,6 +24,7 @@
             <div class="containerLinkuri">
                 <div class="containerInchis">
                     <ul>
+                        <li sec:authorize="hasRole('ROLE_HOSPITAL')"><a th:href="@{/addDoctorAccount}"><img src="/images/user (1).png" alt="Image">Add a Doctor</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addHospitalAccount}"><img src="/images/user (1).png" alt="Image">Add a Hospital</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addPharmacyAccount}"><img src="/images/user (1).png" alt="Image">Add a Pharmacy</a></li>
                         <li sec:authorize="hasRole('ROLE_HOSPITAL')"><a th:href="@{/manageDoctors}"><img src="/images/medical-team.png" alt="Image">Manage Doctors</a></li>

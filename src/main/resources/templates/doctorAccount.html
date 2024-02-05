@@ -33,9 +33,9 @@
             <div class="row justify-content-center">
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up a hospital</p>
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up a doctor</p>
 
-                <form method="post" th:action="@{/addHospitalAccount/save}" class="mx-1 mx-md-4" th:object="${hospitalUser}" enctype="multipart/form-data">
+                <form method="post" th:action="@{/addDoctorAccount/save}" class="mx-1 mx-md-4" th:object="${doctorUser}" enctype="multipart/form-data">
 
                   <p class="alert alert-danger" role="alert" th:if="${param.fail}">There is already a user with this email!</p>
 
@@ -56,28 +56,35 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" required placeholder="Name" class="form-control" th:field="*{name}"/>
+                      <input type="text" required placeholder="First name" class="form-control" th:field="*{firstName}"/>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" required placeholder="Address" class="form-control" th:field="*{address}"/>
+                      <input type="text" required placeholder="Last name" class="form-control" th:field="*{lastName}"/>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" required placeholder="City" class="form-control" th:field="*{city}"/>
+                      <input required placeholder="Birthday" class="form-control" th:field="*{birthday}" type="date"/>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text"  required placeholder="Country" class="form-control" th:field="*{country}"/>
+                      <input type="text" required placeholder="Specialty" class="form-control" th:field="*{specialty}"/>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text"  required placeholder="Nationality" class="form-control" th:field="*{nationality}"/>
                     </div>
                   </div>
 

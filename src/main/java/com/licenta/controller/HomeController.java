@@ -19,6 +19,7 @@ public class HomeController {
         return "index";
     }
 
+    //asa poti verifica ce rol are utilziatorul logat
 //    @ResponseBody
 //    @GetMapping("/role")
 //    public String getCurrentUserRole() {

@@ -1,0 +1,106 @@
+.container-all-hospitals{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+
+body {
+  font-family: 'Afacad', sans-serif;
+  background-color: #99d6ff;
+}
+
+
+.hospital-box {
+    border: 2px solid #66c2ff;/* Calculează lățimea pentru a ocupa 33%, lăsând un spațiu de 20px între elemente */
+    border-radius: 10px;
+    width: calc(33% - 20px);
+    box-sizing: border-box; /* Include marginile și paddingul în lățimea totală a div-ului */
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #66c2ff;
+}
+
+.hospital-image {
+    width: 200px;
+    height: 120px;
+}
+
+.image-box{
+    margin:0px 10px;
+}
+
+.hospital-details{
+    margin:0px 10px;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #66c2ff;
+    color: white;
+    border: 1px solid #66c2ff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 2px;
+}
+
+/* Stilizare butoane de paginare */
+.pagination-button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #66c2ff;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+
+.pagination-button.disabled {
+    background-color: #66c2ff;
+    color: #555;
+    cursor: not-allowed;
+
+}
+
+a{
+  text-decoration:none;
+  color: black;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none; /* Elimină stilul implicit al listei */
+    padding: 0; /* Elimină marginile implicite ale listei */
+    width: 1000px;
+}
+
+.div-spitale{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top:20px;
+}
+
+

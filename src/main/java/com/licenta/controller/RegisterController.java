@@ -1,9 +1,6 @@
 package com.licenta.controller;
 
-import com.licenta.dto.HospitalProfileDto;
-import com.licenta.dto.PharmacyDto;
-import com.licenta.dto.RegistrationAndRoleDto;
-import com.licenta.dto.RegistrationDto;
+import com.licenta.dto.*;
 import com.licenta.entity.User;
 import com.licenta.service.UserService;
 import jakarta.validation.Valid;
@@ -35,22 +32,6 @@ public class RegisterController {
         return "redirect:/login?register=true";
     }
 
-//    @GetMapping("/addAccount")
-//    public String addAccount(Model model){
-//        model.addAttribute("user", new RegistrationAndRoleDto());
-//        return "addAccount";
-//    }
-
-//    @PostMapping("/addAccount/save")
-//    public String saveAccount(@Valid @ModelAttribute("user")RegistrationAndRoleDto user){
-//        User existingUserEmail = userService.findByEmail(user.getEmail());
-//        if(existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()){
-//            return "redirect:/addAccount?fail";
-//        }
-//        userService.saveHospitalOrPharmacy(user);
-//        return "redirect:/register?addAccount";
-//    }
-
     @GetMapping("/addHospitalAccount")
     public String addHospitalAccount(Model model){
         model.addAttribute("hospitalUser", new HospitalProfileDto());
@@ -72,6 +53,18 @@ public class RegisterController {
     @PostMapping("/addPharmacyAccount/save")
     public String savePharmacyAccount(@Valid @ModelAttribute("pharmacyUser")PharmacyDto pharmacyDto){
         userService.savePharmacyUserAndProfile(pharmacyDto);
+        return "redirect:/home";
+    }
+
+    @GetMapping("/addDoctorAccount")
+    public String addDoctorAccount(Model model){
+        model.addAttribute("doctorUser", new DoctorDto());
+        return "doctorAccount";
+    }
+
+    @PostMapping("/addDoctorAccount/save")
+    public String saveDoctorAccount(@Valid @ModelAttribute("doctorUser") DoctorDto doctorDto){
+        userService.saveDoctorUserAndProfile(doctorDto);
         return "redirect:/home";
     }
 }

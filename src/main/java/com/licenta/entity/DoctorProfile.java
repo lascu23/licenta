@@ -1,10 +1,10 @@
 package com.licenta.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import javax.print.Doc;
-import java.sql.Blob;
 
 @Data
 @Entity
@@ -23,6 +23,10 @@ public class DoctorProfile {
 
     @Column(name = "profile_picture")
     private byte[] profileImage;
+
+    private String specialty;
+
+    private String nationality;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

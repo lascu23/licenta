@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Hospitals</title>
+  <link rel="stylesheet" type="text/css" href="/css/header.css">
+  <link rel="stylesheet" type="text/css" href="/css/hospitals.css">
+
+</head>
+<body>
+
+<div>
+  <header>
+    <div th:replace="~{header :: header}">...</div>
+  </header>
+</div>
+
+<form method="get" th:action="@{/hospitals}">
+  <input type="text" name="search" placeholder="Search a hospital">
+  <button type="submit">Search</button>
+</form>
+
+<div class="container-all-hospitals">
+  <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(hospitalProfiles.content)-1)}">
+    <div class="image-box">
+      <img class="hospital-image" th:src="'data:image/png;base64,' + ${base64Images[index]}" alt="User Image"/>
+    </div>
+    <div class="hospital-details">
+      <strong><p th:text="${hospitalProfiles.content[index].name}"></p></strong>
+      <p th:text="${hospitalProfiles.content[index].address}"></p>
+      <p th:text="${hospitalProfiles.content[index].city}"></p>
+      <p th:text="${hospitalProfiles.content[index].country}"></p>
+    </div>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+      <form th:action="@{/deleteHospital}" th:method="post">
+        <input type="hidden" th:name="hospitalId" th:value="${hospitalProfiles.content[index].id}" />
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div th:if="${totalPages > 1}" class="div-spitale">
+  <ul class="pagination">
+    <li th:class="${currentPage == 0 ? 'pagination-button disabled' : 'pagination-button'}">
+      <a th:href="@{/hospitals(page=0)}">First</a>
+    </li>
+    <li th:class="${currentPage > 0 ? 'pagination-button' : 'pagination-button disabled'}">
+      <a th:if="${currentPage > 0}" th:href="@{/hospitals(page=${currentPage - 1})}">Previous</a>
+      <span th:if="${currentPage == 0}">Previous</span>
+    </li>
+    <li th:class="${currentPage < totalPages - 1 ? 'pagination-button' : 'pagination-button disabled'}">
+      <a th:if="${currentPage < totalPages - 1}" th:href="@{/hospitals(page=${currentPage + 1})}">Next</a>
+      <span th:if="${currentPage == totalPages - 1}">Next</span>
+    </li>
+    <li th:class="${currentPage == totalPages - 1 ? 'pagination-button disabled' : 'pagination-button'}">
+      <a th:href="@{/hospitals(page=${totalPages - 1})}" >Last</a>
+    </li>
+  </ul>
+</div>
+
+
+
+</body>
+</html>

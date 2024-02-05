@@ -6,10 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Blob;
-
 @Data
-public class PharmacyDto {
+public class DoctorDto {
     @NotEmpty
     @NotNull
     @NotBlank
@@ -21,19 +19,24 @@ public class PharmacyDto {
     @NotEmpty
     @NotNull
     @NotBlank
-    private String name;
+    private String firstName;
     @NotEmpty
     @NotNull
     @NotBlank
-    private String address;
+    private String lastName;
     @NotEmpty
     @NotNull
     @NotBlank
-    private String city;
-    @NotEmpty
-    @NotNull
-    @NotBlank
-    private String country;
+    private String birthday;
 
     private MultipartFile profileImage;
+    @NotEmpty
+    @NotNull
+    @NotBlank
+    private String specialty;
+    @NotEmpty
+    @NotNull
+    @NotBlank
+    private String nationality;
+
 }
