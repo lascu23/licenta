@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Blob;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -28,4 +31,13 @@ public class PharmacyProfile {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany(mappedBy = "pharmacyProfileSet")
+    private Set<Medicines> medicinesSet = new HashSet<>();
+
+    //override ul de mai jos este pentru stackoverflow error
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -33,21 +33,21 @@ public class HomeController {
 //        return null;
 //    }
 
-    @GetMapping("/profile")
-    public String afiseazaProfil(Authentication authentication) {
-        if (authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_DOCTOR"))) {
-            return "doctor_profile";
-        } else if (authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_PATIENT"))) {
-            return "patient_profile";
-        } else if (authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_HOSPITAL"))) {
-            return "hospitalProfile";
-        } else if (authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_PHARMACY"))) {
-            return "pharmacy_profile";
-        }
-        return "index";
-    }
+//    @GetMapping("/profile")
+//    public String afiseazaProfil(Authentication authentication) {
+//        if (authentication != null && authentication.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ROLE_DOCTOR"))) {
+//            return "doctor_profile";
+//        } else if (authentication != null && authentication.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ROLE_PATIENT"))) {
+//            return "patient_profile";
+//        } else if (authentication != null && authentication.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ROLE_HOSPITAL"))) {
+//            return "hospitalProfile";
+//        } else if (authentication != null && authentication.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ROLE_PHARMACY"))) {
+//            return "pharmacy_profile";
+//        }
+//        return "index";
+//    }
 }

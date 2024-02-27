@@ -39,7 +39,7 @@ public class HospitalController {
     @GetMapping("/hospitals")
     public String getHospitalsPagination(Model model, @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(required = false, name = "search")String search){
-        int pageSize = 3;
+        int pageSize = 15;
 
         Page<HospitalProfile> hospitalProfiles;
 
@@ -63,8 +63,11 @@ public class HospitalController {
 
     @PostMapping("/deleteHospital")
     public String deleteHospital(@RequestParam("hospitalId") int id){
+        HospitalProfile hospitalProfile = hospitalProfileRepository.findById(id);
         hospitalProfileRepository.deleteById(id);
+        userRepository.delete(userRepository.findById(hospitalProfile.getUser().getId()));
         return "redirect:/hospitals";
+
     }
 
 

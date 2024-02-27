@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Alte elemente din head -->
+    <meta charset="UTF-8">
+    <title>Medicines</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/hospitals.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
+    <style>
+        .container-all-hospitals {
+            margin: 20px;
+        }
+
+        .hospital-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .hospital-details {
+            margin-bottom: 10px;
+        }
+
+        .hospital-details strong {
+            font-weight: bold;
+        }
+
+        .hospital-details p {
+            margin: 5px 0;
+        }
+
+        .admin-actions,
+        .pharmacy-actions {
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            color: #fff;
+        }
+
+        .btn-success {
+            background-color: #5cb85c;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div>
+    <header>
+        <div th:replace="~{header :: header}">...</div>
+    </header>
+</div>
+
+<form method="get" th:action="@{/seeMedicinesForOnePharmacy}">
+    <input type="text" th:name="search" placeholder="Search a medicine">
+    <input type="hidden" th:name="address" th:value="${param.address}">
+    <input type="hidden" th:name="name" th:value="${param.name}">
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${#lists.size(medicines.content) > 0}" class="container-all-hospitals">
+    <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(medicines.content)-1)}">
+        <div class="hospital-details">
+            <strong>Name: <p th:text="${medicines.content[index].name}" style="display: inline;"></p></strong>
+
+            <strong><p>Form: </strong><span th:text="${medicines.content[index].pharmaceuticalForm}"></span></p>
+            <strong><p>Concentration: </strong><span th:text="${medicines.content[index].concentration}"></span></p>
+            <strong><p>Packaging: </strong><span th:text="${medicines.content[index].packaging}"></span></p>
+            <strong><p>Validity: </strong><span th:text="${medicines.content[index].validity}"></span></p>
+            <strong><p><span th:text="${medicines.content[index].price}"></span> RON</p></strong>
+            <strong><p>Indications:</strong> <span th:text="${medicines.content[index].indications}"></span></p>
+            <strong><p>Side Effects: </strong><span th:text="${medicines.content[index].sideEffects}"></span></p>
+            <strong><p>Volume: </strong><span th:text="${medicines.content[index].volume}"></span></p>
+            <p th:text="${medicines.content[index].prescriptionRequired ? 'You need prescription' : 'Prescription not required'}"></p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

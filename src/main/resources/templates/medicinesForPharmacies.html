@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicines</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/hospitals.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
+    <style>
+        .container-all-hospitals {
+            margin: 20px;
+        }
+
+        .hospital-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .hospital-details {
+            margin-bottom: 10px;
+        }
+
+        .hospital-details strong {
+            font-weight: bold;
+        }
+
+        .hospital-details p {
+            margin: 5px 0;
+        }
+
+        .admin-actions,
+        .pharmacy-actions {
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            color: #fff;
+        }
+
+        .btn-success {
+            background-color: #5cb85c;
+            color: #fff;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div>
+    <header>
+        <div th:replace="~{header :: header}">...</div>
+    </header>
+</div>
+
+<form method="get" th:action="@{/getMedicines}">
+    <input type="text" name="search" placeholder="Search a medicine">
+    <button type="submit">Search</button>
+</form>
+
+<!--<div th:if="${#lists.size(medicines.content) > 0}" class="container-all-hospitals">-->
+<!--    <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(medicines.content)-1)}">-->
+<!--        <div class="hospital-details">-->
+<!--            <strong><p>Name: </p><p th:text="${medicines.content[index].name}" style="display: inline;"></p></strong>-->
+
+<!--            <p>Form: </p><p th:text="${medicines.content[index].pharmaceuticalForm}"></p>-->
+<!--            <p>Concentration: </p><p th:text="${medicines.content[index].concentration}"></p>-->
+<!--            <p>Packaging: </p><p th:text="${medicines.content[index].packaging}"></p>-->
+<!--            <p>Validity: </p><p th:text="${medicines.content[index].validity}"></p>-->
+<!--            <p>Price: </p><p th:text="${medicines.content[index].price}"></p>-->
+<!--            <p>Indications: </p><p th:text="${medicines.content[index].indications}"></p>-->
+<!--            <p>Side Effects: </p><p th:text="${medicines.content[index].sideEffects}"></p>-->
+<!--            <p th:text="${medicines.content[index].prescriptionRequired ? 'You need prescription' : 'Prescription not required'}"></p>-->
+<!--        </div>-->
+<!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--            <form th:action="@{/deleteMedicine}" th:method="post">-->
+<!--                <input type="hidden" th:name="medicineId" th:value="${medicines.content[index].id}" />-->
+<!--                <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <form sec:authorize="hasRole('ROLE_PHARMACY')" th:action="@{/addMedicineToPharmacy}" th:method="post">-->
+<!--                <input type="hidden" th:name="medicineId" th:value="${medicines.content[index].id}">-->
+<!--                <input type="number" th:name="quantity" placeholder="Quantity" required>-->
+<!--                <button type="submit" class="btn btn-success">Add</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div th:if="${#lists.size(medicines.content) > 0}" class="container-all-hospitals">
+    <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(medicines.content)-1)}">
+        <div class="hospital-details">
+            <strong>Name: <p th:text="${medicines.content[index].name}" style="display: inline;"></p></strong>
+
+            <strong><p>Form: </strong><span th:text="${medicines.content[index].pharmaceuticalForm}"></span></p>
+            <strong><p>Concentration: </strong><span th:text="${medicines.content[index].concentration}"></span></p>
+            <strong><p>Packaging: </strong><span th:text="${medicines.content[index].packaging}"></span></p>
+            <strong><p>Validity: </strong><span th:text="${medicines.content[index].validity}"></span></p>
+            <strong><p><span th:text="${medicines.content[index].price}"></span> RON</p></strong>
+            <strong><p>Indications:</strong> <span th:text="${medicines.content[index].indications}"></span></p>
+            <strong><p>Side Effects: </strong><span th:text="${medicines.content[index].sideEffects}"></span></p>
+            <strong><p>Volume: </strong><span th:text="${medicines.content[index].volume}"></span></p>
+            <p th:text="${medicines.content[index].prescriptionRequired ? 'You need prescription' : 'Prescription not required'}"></p>
+        </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="admin-actions">
+            <form th:action="@{/deleteMedicine}" th:method="post">
+                <input type="hidden" th:name="medicineId" th:value="${medicines.content[index].id}" />
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        <div sec:authorize="hasRole('ROLE_PHARMACY')" class="pharmacy-actions">
+            <form th:action="@{/addMedicineToPharmacy}" th:method="post">
+                <input type="hidden" th:name="medicineId" th:value="${medicines.content[index].id}">
+                <input type="number" th:name="quantity" placeholder="Quantity" required>
+                <button type="submit" >Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div th:if="${totalPages > 1}" class="div-spitale">
+    <ul class="pagination">
+        <li th:class="${currentPage == 0 ? 'pagination-button disabled' : 'pagination-button'}">
+            <a th:href="@{/getMedicines(page=0)}">First</a>
+        </li>
+        <li th:class="${currentPage > 0 ? 'pagination-button' : 'pagination-button disabled'}">
+            <a th:if="${currentPage > 0}" th:href="@{/getMedicines(page=${currentPage - 1})}">Previous</a>
+            <span th:if="${currentPage == 0}">Previous</span>
+        </li>
+        <li th:class="${currentPage < totalPages - 1 ? 'pagination-button' : 'pagination-button disabled'}">
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/getMedicines(page=${currentPage + 1})}">Next</a>
+            <span th:if="${currentPage == totalPages - 1}">Next</span>
+        </li>
+        <li th:class="${currentPage == totalPages - 1 ? 'pagination-button disabled' : 'pagination-button'}">
+            <a th:href="@{/getMedicines(page=${totalPages - 1})}" >Last</a>
+        </li>
+    </ul>
+</div>
+
+
+
+</body>
+</html>

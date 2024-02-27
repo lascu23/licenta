@@ -2,6 +2,7 @@ package com.licenta.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.parameters.P;
 
 @Data
 @Entity

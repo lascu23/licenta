@@ -4,6 +4,7 @@ package com.licenta.controller;
 import com.licenta.entity.DoctorProfile;
 import com.licenta.entity.HospitalProfile;
 import com.licenta.repository.DoctorProfileRepository;
+import com.licenta.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,25 +25,14 @@ public class DoctorsController {
     @Autowired
     private DoctorProfileRepository doctorProfileRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
-    @GetMapping("/manageDoctors")
-    public String getAllDoctorsForHospital(Model model){
-        List<DoctorProfile> doctorProfileList = doctorProfileRepository.findAll();
-        model.addAttribute("doctors", doctorProfileList);
-        return "doctors";
-    }
-
-//    @GetMapping("/doctors")
-//    public String getAllDoctors(Model model){
-//        List<DoctorProfile> doctorProfileList = doctorProfileRepository.findAll();
-//        model.addAttribute("doctors", doctorProfileList);
-//        return "doctors";
-//    }
 
     @GetMapping("/doctors")
     public String getDoctorsPagination(Model model, @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(required = false, name = "search")String search){
-        int pageSize = 3;
+        int pageSize = 15;
 
         Page<DoctorProfile> doctorProfiles;
 
@@ -66,7 +56,10 @@ public class DoctorsController {
 
     @PostMapping("/deleteDoctor")
     public String deleteDoctor(@RequestParam("doctorId") int id){
+
+        DoctorProfile doctorProfile = doctorProfileRepository.findById(id);
         doctorProfileRepository.deleteById(id);
+        userRepository.delete(userRepository.findById(doctorProfile.getUser().getId()));
         return "redirect:/doctors";
     }
 }

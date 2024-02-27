@@ -5,6 +5,8 @@
   <title>Doctors</title>
   <link rel="stylesheet" type="text/css" href="/css/header.css">
   <link rel="stylesheet" type="text/css" href="/css/hospitals.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
+
 
 </head>
 <body>
@@ -20,10 +22,12 @@
   <button type="submit">Search</button>
 </form>
 
-<div class="container-all-hospitals">
+<div th:if="${#lists.size(doctorProfiles.content) > 0}" class="container-all-hospitals">
   <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(doctorProfiles.content)-1)}">
     <div class="image-box">
-      <img class="hospital-image" th:src="'data:image/png;base64,' + ${base64Images[index]}" alt="User Image"/>
+      <a th:href="@{/profileDoctor(firstName=${doctorProfiles.content[index].firstName}, lastName=${doctorProfiles.content[index].lastName}, specialty=${doctorProfiles.content[index].specialty})}">
+        <img class="hospital-image" th:src="'data:image/png;base64,' + ${base64Images[index]}" alt="User Image"/>
+      </a>
     </div>
     <div class="hospital-details">
       <strong><p th:text="${doctorProfiles.content[index].lastName}" style="display: inline;"></p> <p th:text="${doctorProfiles.content[index].firstName}" style="display: inline;"></p></strong>

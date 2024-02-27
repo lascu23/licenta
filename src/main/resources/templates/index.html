@@ -24,11 +24,14 @@
             <div class="containerLinkuri">
                 <div class="containerInchis">
                     <ul>
-                        <li sec:authorize="hasRole('ROLE_HOSPITAL')"><a th:href="@{/addDoctorAccount}"><img src="/images/user (1).png" alt="Image">Add a Doctor</a></li>
+                        <li sec:authorize="hasAnyRole('ROLE_HOSPITAL', 'ROLE_ADMIN')"><a th:href="@{/addDoctorAccount}"><img src="/images/user (1).png" alt="Image">Add a Doctor</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addHospitalAccount}"><img src="/images/user (1).png" alt="Image">Add a Hospital</a></li>
                         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addPharmacyAccount}"><img src="/images/user (1).png" alt="Image">Add a Pharmacy</a></li>
-                        <li sec:authorize="hasRole('ROLE_HOSPITAL')"><a th:href="@{/manageDoctors}"><img src="/images/medical-team.png" alt="Image">Manage Doctors</a></li>
-                        <li  th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" sec:authorize="isAuthenticated" ><a href="/profile"><img src="/images/user.png" alt="Imagine">Profile</a></li>
+                        <li th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" sec:authorize="isAuthenticated() and !hasRole('ROLE_PATIENT')">
+                            <a th:href="@{/profile}"><img src="/images/user (1).png" alt="Image">Profile</a>
+                        </li>
+                        <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/profilePatient"><img src="/images/user (1).png" alt="Image">Profile</a></li>
+                        <li sec:authorize="hasAnyRole('ROLE_PHARMACY', 'ROLE_ADMIN')"><a href="/getMedicines"><img src="/images/pills.png" alt="Image">Medicines</a></li>
                         <li><a href="/doctors"><img src="/images/doctor.png" alt="Imagine">Doctors</a></li>
                         <li><a href="/hospitals"><img src="/images/hospital.png" alt="Imagine">Hospitals</a></li>
                         <li><a href="/pharmacies"><img src="/images/pharmacy.png" alt="Imagine">Pharmacies</a></li>

@@ -19,5 +19,9 @@ public interface HospitalProfileRepository extends JpaRepository<HospitalProfile
     Page<HospitalProfile> findByNameOrCity(@Param("searchTerm") String search, Pageable pageable);
 
 //    @Query("SELECT h FROM HospitalProfile h WHERE h.user.id= :userId")
-    HospitalProfile findByUserId(@Param("userId") int userId);
+//    HospitalProfile findByUserId(@Param("userId") int userId);
+
+    HospitalProfile findById(int id);
+    HospitalProfile findByUserId( int userId);
+    HospitalProfile findByNameAndAddress(String name, String address);
 }

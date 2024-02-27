@@ -24,7 +24,6 @@ public class SecurityConfig{
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/login").permitAll()
-//                        .requestMatchers("/addAccount").hasRole("ADMIN")
                         .requestMatchers("/addHospitalAccount/save").hasRole("ADMIN")
                         .requestMatchers("/addHospitalAccount").hasRole("ADMIN")
                         .requestMatchers("/addPharmacyAccount").hasRole("ADMIN")
@@ -35,7 +34,6 @@ public class SecurityConfig{
                         .requestMatchers("/doctors").permitAll()
                         .requestMatchers("/manageDoctors").hasAnyRole("ADMIN","HOSPITAL")
                         .requestMatchers("/hospitals").permitAll()
-//                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
                 ).formLogin(form -> form
