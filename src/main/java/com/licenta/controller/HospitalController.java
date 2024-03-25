@@ -36,7 +36,7 @@ public class HospitalController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/hospitals")
+    @GetMapping("/hospitals") //afiseaza toate spitalele existente
     public String getHospitalsPagination(Model model, @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(required = false, name = "search")String search){
         int pageSize = 15;
@@ -61,7 +61,7 @@ public class HospitalController {
         return "hospitalsPagination";
     }
 
-    @PostMapping("/deleteHospital")
+    @PostMapping("/deleteHospital") //sterge un spital
     public String deleteHospital(@RequestParam("hospitalId") int id){
         HospitalProfile hospitalProfile = hospitalProfileRepository.findById(id);
         hospitalProfileRepository.deleteById(id);

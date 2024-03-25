@@ -1,5 +1,7 @@
-package com.licenta.entity;
+package com.licenta.EmbeddedKeys;
 
+import com.licenta.entity.Medicines;
+import com.licenta.entity.PharmacyProfile;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

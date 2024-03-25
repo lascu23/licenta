@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.parameters.P;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "patient_profile")
@@ -28,4 +30,7 @@ public class PatientProfile {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "patientProfile", cascade = CascadeType.ALL, targetEntity = Appointment.class)
+    private Set<Appointment> appointments;
 }

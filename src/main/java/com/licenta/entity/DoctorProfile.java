@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "doctor_profile")
@@ -37,4 +40,10 @@ public class DoctorProfile {
     @ManyToOne
     @JoinColumn(name = "hospital_id")
     private HospitalProfile hospitalProfile;
+
+    @ManyToMany(mappedBy = "doctorProfileHashSet")
+    private Set<Schedule> scheduleSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "doctorProfile", cascade = CascadeType.ALL, targetEntity = Appointment.class)
+    private Set<Appointment> appointments;
 }

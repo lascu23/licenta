@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Profil</title>
@@ -11,10 +11,26 @@
             font-family: 'Afacad', sans-serif;
             background-color: #99d6ff;
         }
-        #homeButton{
+        #homeAndAppointmentButtons a{
             text-decoration: none;
             color:black;
+            font-size: 20px;
         }
+        .breadcrumb {
+            display: flex;
+            justify-content: space-between; /* Aliniere în stânga și dreapta */
+        }
+
+        .breadcrumb-item.right {
+            margin-left: auto; /* Aliniază acest element în dreapta */
+        }
+        .custom-rounded {
+            border-radius: 20%; /* Ajustați procentajul pentru a obține aspectul dorit */
+            overflow: hidden; /* Asigurați-vă că imaginea este tăiată la forma pătrată */
+            width: 350px;
+            height: 200px;
+        }
+
     </style>
 </head>
 <body>
@@ -24,9 +40,19 @@
         <div class="row">
             <div class="col">
                 <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/home" id="homeButton">MedManager</a></li>
+                    <ol class="breadcrumb mb-0" id="homeAndAppointmentButtons">
+                        <li class="breadcrumb-item"><a href="/home">MedManager</a></li>
+                        <li sec:authorize="hasRole('ROLE_PATIENT')">
+<!--                            <a href="/makeAppointment">Make Appointment</a>-->
+                            <form method="get" action="makeAppointment">
+                                <input type="hidden" th:name="firstName" th:value="${param.firstName}">
+                                <input type="hidden" th:name="lastName" th:value="${param.lastName}">
+                                <input type="hidden" th:name="specialty" th:value="${param.specialty}">
+                                <button type="submit">Make Appointment</button>
+                            </form>
+                        </li>
                     </ol>
+
                 </nav>
             </div>
         </div>
@@ -36,7 +62,25 @@
                 <div class="card mb-4">
                     <div class="card-body text-center">
                         <img th:src="'data:image/png;base64,' + ${profilePicture}" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 350px; height: 200px;">
+                             class="custom-rounded">
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_DOCTOR')">
+                        <p class="alert alert-danger" role="alert" th:if="${param.wrongHour}">The schedule must correspond to the hospital's program!</p>
+                        <form th:action="@{/schedule/save}" th:object="${form}" method="post" >
+                            <div class="containerSchedule">
+                                <div th:each="schedule, itemStat : *{schedules}"  class="schedule" style="margin-left:50px;">
+                                    <input th:field="*{schedules[__${itemStat.index}__].day}" th:value="${schedule.getDay()}" style="width: 100px;" placeholder="Day">
+                                    <input th:field="*{schedules[__${itemStat.index}__].startHour}" th:value="${schedule.getStartHour()}" style="width: 100px;" placeholder="Start HH:MM">
+                                    <input th:field="*{schedules[__${itemStat.index}__].endHour}" th:value="${schedule.getEndHour()}" style="width: 100px;" placeholder="End HH:MM">
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin: 3px 0;">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a th:href="@{/deleteSchedule}" onclick="return confirm('Are you sure?')" class="text-center">
+                                    <button type="button" class="btn btn-danger">Delete Schedule</button>
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
 

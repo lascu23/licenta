@@ -16,13 +16,13 @@ public class RegisterController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/register")
+    @GetMapping("/register") //pagina de register
     public String getRegisterForm(Model model){
         model.addAttribute("user", new RegistrationDto());
         return "register";
     }
 
-    @PostMapping("/register/save")
+    @PostMapping("/register/save") //se salveaza un nou cont
     public String register(@Valid @ModelAttribute("user")RegistrationDto user){
         User existingUserEmail = userService.findByEmail(user.getEmail());
         if(existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()){
@@ -32,37 +32,37 @@ public class RegisterController {
         return "redirect:/login?register=true";
     }
 
-    @GetMapping("/addHospitalAccount")
+    @GetMapping("/addHospitalAccount") //pagina de adaugare a unui spital
     public String addHospitalAccount(Model model){
         model.addAttribute("hospitalUser", new HospitalProfileDto());
         return "hospitalAccount";
     }
 
-    @PostMapping("/addHospitalAccount/save")
+    @PostMapping("/addHospitalAccount/save") //se salveaza contul spitalului
     public String saveHospitalAccount(@Valid @ModelAttribute("hospitalUser")HospitalProfileDto hospitalProfileDto){
         userService.saveHospitalUserAndProfile(hospitalProfileDto);
         return "redirect:/home";
     }
 
-    @GetMapping("/addPharmacyAccount")
+    @GetMapping("/addPharmacyAccount")//pagina de adaugare a unei farmacii
     public String addPharmacyAccount(Model model){
         model.addAttribute("pharmacyUser", new PharmacyDto());
         return "pharmacyAccount";
     }
 
-    @PostMapping("/addPharmacyAccount/save")
+    @PostMapping("/addPharmacyAccount/save")//se salveaza contul farmaciei
     public String savePharmacyAccount(@Valid @ModelAttribute("pharmacyUser")PharmacyDto pharmacyDto){
         userService.savePharmacyUserAndProfile(pharmacyDto);
         return "redirect:/home";
     }
 
-    @GetMapping("/addDoctorAccount")
+    @GetMapping("/addDoctorAccount")//pagina de adaugare a unui doctor
     public String addDoctorAccount(Model model){
         model.addAttribute("doctorUser", new DoctorDto());
         return "doctorAccount";
     }
 
-    @PostMapping("/addDoctorAccount/save")
+    @PostMapping("/addDoctorAccount/save")//se salveaza contul doctorului
     public String saveDoctorAccount(@Valid @ModelAttribute("doctorUser") DoctorDto doctorDto){
         userService.saveDoctorUserAndProfile(doctorDto);
         return "redirect:/home";

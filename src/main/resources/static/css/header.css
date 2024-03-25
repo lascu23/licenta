@@ -1,4 +1,4 @@
-.container{
+.container-header{
     display: flex;
     justify-content: space-between;
     padding: 10px 0px;
@@ -14,18 +14,18 @@ body{
     padding: 0;
 }
 
-#homeButton{
+#homeButton-header{
     font-size: 40px;
     color:#404040;
 }
 
-.container li{
+.container-header li{
     font-size: 20px;
     list-style: none;
     color:#404040;
 }
 
-.container a{
+.container-header a{
     text-decoration: none;
     color:black;
 }

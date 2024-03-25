@@ -27,9 +27,6 @@ public class User {
     //role_id e numele cheii straine din baza de date
     private Role role;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, targetEntity = AdminProfile.class)
-    private Set<AdminProfile> adminProfileSet;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, targetEntity = PharmacyProfile.class)
     private Set<PharmacyProfile> pharmacyProfileSet;
 

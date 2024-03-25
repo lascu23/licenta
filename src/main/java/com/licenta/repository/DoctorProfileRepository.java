@@ -16,7 +16,6 @@ import java.util.List;
 public interface DoctorProfileRepository extends JpaRepository<DoctorProfile, Integer> {
     @Query("SELECT h from DoctorProfile h WHERE LOWER(h.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(h.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     Page<DoctorProfile> findByFirstNameOrLastName(@Param("searchTerm") String search, Pageable pageable);
-
     DoctorProfile findByUserId(int userId);
     DoctorProfile findById(int id);
     DoctorProfile findByFirstNameAndLastNameAndSpecialty(String firstName, String lastName, String specialty);

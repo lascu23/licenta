@@ -35,6 +35,9 @@ public class PharmacyProfile {
     @ManyToMany(mappedBy = "pharmacyProfileSet")
     private Set<Medicines> medicinesSet = new HashSet<>();
 
+    @ManyToMany(mappedBy = "pharmacyProfileSet")
+    private Set<Schedule> scheduleSet = new HashSet<>();
+
     //override ul de mai jos este pentru stackoverflow error
     @Override
     public int hashCode() {

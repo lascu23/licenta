@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -33,4 +34,7 @@ public class HospitalProfile {
 
     @OneToMany(mappedBy = "hospitalProfile", cascade = CascadeType.ALL, targetEntity = DoctorProfile.class)
     private Set<DoctorProfile> doctorProfileSet;
+
+    @ManyToMany(mappedBy = "hospitalProfilesSet")
+    private Set<Schedule> scheduleSet = new HashSet<>();
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment</title>
+    <link rel="stylesheet" type="text/css" href="/css/appointment.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
+        <link rel="stylesheet" type="text/css" href="/css/header.css">
+</head>
+<body>
+
+<div>
+    <header>
+        <div th:replace="~{header :: header}">...</div>
+    </header>
+</div>
+
+<div class="container">
+    <h1>Programare la Doctor</h1>
+    <form action="/makeAppointment/save" method="post">
+        <label for="pacient">Pacient:</label>
+        <input type="text" id="pacient" th:value="${patientName}" readonly>
+
+        <label for="doctor">Doctor:</label>
+        <input type="text" id="doctor" th:value="${doctorName}" readonly>
+
+        <label for="data">Data programării:</label>
+        <input type="date" id="data" name="data">
+
+        <label for="ora">Ora programării:</label>
+        <input type="time" id="ora" name="ora">
+
+        <label for="note">Note suplimentare:</label>
+        <textarea id="note" name="note" rows="4" placeholder="Note suplimentare..."></textarea>
+
+        <button type="submit">Programare</button>
+    </form>
+</div>
+</body>
+</html>

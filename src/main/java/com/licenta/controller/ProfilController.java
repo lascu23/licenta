@@ -1,7 +1,9 @@
 package com.licenta.controller;
 
 import com.licenta.dto.RegisterPatientDto;
+import com.licenta.dto.ScheduleDto;
 import com.licenta.entity.*;
+import com.licenta.entity.SchedulePharmacyProfile;
 import com.licenta.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.print.Doc;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ProfilController {
@@ -31,9 +36,15 @@ public class ProfilController {
     private PharmacyProfileRepository pharmacyProfileRepository;
     @Autowired
     private HospitalProfileRepository hospitalProfileRepository;
+    @Autowired
+    private SchedulePharmacyProfileRepository schedulePharmacyProfileRepository;
+    @Autowired
+    private ScheduleHospitalProfileRepository scheduleHospitalProfileRepository;
+    @Autowired
+    private ScheduleDoctorProfileRepository scheduleDoctorProfileRepository;
 
 
-    @GetMapping("/profilePatient")
+    @GetMapping("/profilePatient") //afiseaza profilul pacientului logat
     public String getProfilePatient(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userLoggedIn = userRepository.findByEmail(authentication.getName());
@@ -50,7 +61,7 @@ public class ProfilController {
         return "createProfilePatient";
     }
 
-    @PostMapping("/profilePatient/save")
+    @PostMapping("/profilePatient/save")//salveaza orice modificare adusa profilului
     public String saveProfilePatient(@ModelAttribute("user") PatientProfile patientProfile){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userLoggedIn = userRepository.findByEmail(authentication.getName());
@@ -72,7 +83,7 @@ public class ProfilController {
         return "redirect:/home";
     }
 
-    @GetMapping("/deleteAccount")
+    @GetMapping("/deleteAccount") //sterge contul unui pacient
     public String deleteAccount(@RequestParam("userEmail") String email, HttpServletRequest request, HttpServletResponse response){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
@@ -85,8 +96,21 @@ public class ProfilController {
         return "redirect:/login?logout=true";
     }
 
-    @GetMapping("/profile")
-    public String getProfile(Model model){
+    private void addScheduleDto(List<Schedule> scheduleList, Model model){
+        if(!scheduleList.isEmpty()){
+            ScheduleDto scheduleDto = new ScheduleDto(scheduleList);
+            model.addAttribute("form", scheduleDto);
+        }else{
+            ScheduleDto schedulesDto = new ScheduleDto();
+            for(int i=1; i <= 7; i++){
+                schedulesDto.addSchedule(new Schedule());
+            }
+            model.addAttribute("form", schedulesDto);
+        }
+    }
+
+    @GetMapping("/profile") //afiseaza profilul unei entitati in functie de logare
+    public String getProfile(Model model, @ModelAttribute("schedules") ArrayList<Schedule> schedules){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userLoggedIn = userRepository.findByEmail(authentication.getName());
 
@@ -96,6 +120,15 @@ public class ProfilController {
                 String base64Image = Base64.getEncoder().encodeToString(doctorProfile.getProfileImage());
                 model.addAttribute("profilePicture", base64Image);
                 model.addAttribute("user", doctorProfile);
+
+                List<ScheduleDoctorProfile> scheduleDoctorProfiles = scheduleDoctorProfileRepository.findByDoctorProfile(doctorProfile);
+                List<Schedule> scheduleList = new ArrayList<>();
+                for(ScheduleDoctorProfile scheduleDoctorProfile : scheduleDoctorProfiles){
+                    scheduleList.add(scheduleDoctorProfile.getSchedule());
+                }
+
+                addScheduleDto(scheduleList, model);
+
                 return "profile_doctor";
             }
             case "HOSPITAL" -> {
@@ -103,6 +136,16 @@ public class ProfilController {
                 String base64Image = Base64.getEncoder().encodeToString(hospitalProfile.getProfileImage());
                 model.addAttribute("profilePicture", base64Image);
                 model.addAttribute("user", hospitalProfile);
+
+                List<ScheduleHospitalProfile> scheduleHospitalProfiles = scheduleHospitalProfileRepository.findByHospitalProfile(hospitalProfile);
+                List<Schedule> scheduleList = new ArrayList<>();
+                for(ScheduleHospitalProfile scheduleHospitalProfile : scheduleHospitalProfiles){
+                    scheduleList.add(scheduleHospitalProfile.getSchedule());
+                }
+
+                addScheduleDto(scheduleList, model);
+
+
                 return "profile_hospital";
             }
             case "PHARMACY" -> {
@@ -110,13 +153,22 @@ public class ProfilController {
                 String base64Image = Base64.getEncoder().encodeToString(pharmacyProfile.getProfileImage());
                 model.addAttribute("profilePicture", base64Image);
                 model.addAttribute("user", pharmacyProfile);
+
+                List<SchedulePharmacyProfile> schedulePharmacyProfiles = schedulePharmacyProfileRepository.findByPharmacyProfile(pharmacyProfile);
+                List<Schedule> scheduleList = new ArrayList<>();
+                for(SchedulePharmacyProfile schedulePharmacyProfile : schedulePharmacyProfiles){
+                    scheduleList.add(schedulePharmacyProfile.getSchedule());
+                }
+
+                addScheduleDto(scheduleList, model);
+
                 return "profile_pharmacy";
             }
         }
         throw new IllegalStateException("Profilul nu poate fi determinat pentru utilizatorul cu id-ul " + userLoggedIn.getId());
     }
 
-    @GetMapping("/profileHospital")
+    @GetMapping("/profileHospital")// din lista tuturor spitalelor, daca apas pe unu ma duce sa i vad pagina de profil
     public String getHospitalProfileFromUserPerspective(@RequestParam("hospital") String hospitalName,@RequestParam String address, Model model){
         HospitalProfile hospitalProfile = hospitalProfileRepository.findByNameAndAddress(hospitalName, address);
         String base64Image = Base64.getEncoder().encodeToString(hospitalProfile.getProfileImage());
@@ -125,7 +177,7 @@ public class ProfilController {
         return "profile_hospital";
     }
 
-    @GetMapping("/profileDoctor")
+    @GetMapping("/profileDoctor")// din lista tuturor doctorilo, daca apas pe unu ma duce sa i vad pagina de profil
     public String getDoctorProfileFromUserPerspective(@RequestParam String firstName,@RequestParam String lastName,@RequestParam String specialty, Model model){
 
         DoctorProfile doctorProfile = doctorProfileRepository.findByFirstNameAndLastNameAndSpecialty(firstName, lastName, specialty);
@@ -135,10 +187,14 @@ public class ProfilController {
         return "profile_doctor";
     }
 
-    @GetMapping("/profilePharmacy")
+    @GetMapping("/profilePharmacy")// din lista tuturor farmaciilor, daca apas pe una ma duce sa i vad pagina de profil
     public String getPharmacyProfileFromUserPerspective(@RequestParam String name,@RequestParam String address, Model model){
         PharmacyProfile pharmacyProfile = pharmacyProfileRepository.findByNameAndAddress(name, address);
         String base64Image = Base64.getEncoder().encodeToString(pharmacyProfile.getProfileImage());
+
+        List<Schedule> schedules = schedulePharmacyProfileRepository.findAllSchedulesByPharmacyProfileId(pharmacyProfile.getId());
+
+        model.addAttribute("schedulesForNotPharmacy", schedules);
         model.addAttribute("profilePicture", base64Image);
         model.addAttribute("user", pharmacyProfile);
         return "profile_pharmacy";

@@ -29,7 +29,7 @@ public class DoctorsController {
     private UserRepository userRepository;
 
 
-    @GetMapping("/doctors")
+    @GetMapping("/doctors") //afiseaza toti doctorii existenti
     public String getDoctorsPagination(Model model, @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(required = false, name = "search")String search){
         int pageSize = 15;
@@ -54,7 +54,7 @@ public class DoctorsController {
         return "doctorsPagination";
     }
 
-    @PostMapping("/deleteDoctor")
+    @PostMapping("/deleteDoctor") //sterge un doctor
     public String deleteDoctor(@RequestParam("doctorId") int id){
 
         DoctorProfile doctorProfile = doctorProfileRepository.findById(id);

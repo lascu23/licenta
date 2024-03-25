@@ -1,10 +1,8 @@
 package com.licenta.entity;
 
+import com.licenta.EmbeddedKeys.MedicinePharmacyProfileId;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.io.Serializable;
-
 
 
 @Entity
