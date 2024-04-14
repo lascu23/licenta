@@ -21,6 +21,21 @@
             width: 350px;
             height: 200px;
         }
+
+        .containerSchedule {
+            display: flex;
+            flex-direction: column; /* Așezare verticală a divurilor */
+        }
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 coloane egale */
+            /*gap: 1px; !* Spațiu între coloane *!*/
+            margin-bottom: 3px; /* Spațiu între divuri */
+            justify-content: center; /* Aliniere la mijloc */
+        }
+        .schedule p {
+            margin: 0; /* Eliminăm marginile implicite ale paragrafelor */
+        }
     </style>
 </head>
 <body>
@@ -60,6 +75,13 @@
                                 </a>
                             </div>
                         </form>
+                    </div>
+                    <div sec:authorize="!hasRole('ROLE_HOSPITAL')" class="containerSchedule">
+                        <div th:each="schedule : *{form}" class="schedule" style="margin-left:50px;">
+                            <p th:text="${schedule.getDay()}" ></p>
+                            <p th:text="${schedule.getStartHour()}"></p>
+                            <p th:text="${schedule.getEndHour()}"></p>
+                        </div>
                     </div>
                 </div>
 

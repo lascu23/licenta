@@ -18,18 +18,4 @@ public class HomeController {
     public String getHomePage(Model model){
         return "index";
     }
-
-    //asa poti verifica ce rol are utilziatorul logat
-//    @ResponseBody
-//    @GetMapping("/role")
-//    public String getCurrentUserRole() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication != null) {
-//            for (GrantedAuthority authority : authentication.getAuthorities()) {
-//                return authority.getAuthority(); // Returns the role
-//            }
-//        }
-//        return null;
-//    }
 }

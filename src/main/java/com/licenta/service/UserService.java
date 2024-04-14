@@ -11,4 +11,6 @@ public interface UserService {
     void saveHospitalUserAndProfile(HospitalProfileDto hospitalProfileDto);
     void savePharmacyUserAndProfile(PharmacyDto pharmacyDto);
     void saveDoctorUserAndProfile(DoctorDto doctorDto);
+
+    User getAuthenticationUser();
 }

@@ -6,7 +6,7 @@
     <title>Appointment</title>
     <link rel="stylesheet" type="text/css" href="/css/appointment.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
-        <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
 
@@ -18,24 +18,74 @@
 
 <div class="container">
     <h1>Programare la Doctor</h1>
-    <form action="/makeAppointment/save" method="post">
+    <form action="/makeAppointment/save" method="get" th:object="${appointment}">
         <label for="pacient">Pacient:</label>
-        <input type="text" id="pacient" th:value="${patientName}" readonly>
+        <input type="hidden" id="pacient" th:field="*{patientProfile}" >
+        <h3 th:text="${appointment.getPatientProfile().getLastName()+ ' ' + appointment.getPatientProfile().getFirstName()}"></h3>
+
 
         <label for="doctor">Doctor:</label>
-        <input type="text" id="doctor" th:value="${doctorName}" readonly>
+        <input type="hidden" id="doctor" th:field="*{doctorProfile}">
+        <h3 th:text="${appointment.getDoctorProfile().getLastName() + ' '+ appointment.getDoctorProfile().getFirstName()}"> </h3>
 
-        <label for="data">Data programării:</label>
-        <input type="date" id="data" name="data">
 
-        <label for="ora">Ora programării:</label>
-        <input type="time" id="ora" name="ora">
+        <label for="dateInput">Data programării:</label>
+        <input type="date" id="dateInput" name="data" th:field="*{appointmentDate}">
 
-        <label for="note">Note suplimentare:</label>
-        <textarea id="note" name="note" rows="4" placeholder="Note suplimentare..."></textarea>
+<!--        <label for="ora">Ora programării:</label>-->
+<!--        <input type="time" id="ora" name="ora" th:field="*{appointmentHour}">-->
+        <select id="selectOptions" th:field="*{appointmentHour}">
+            <option value="">Select an hour</option>
+        </select>
+
+        <label for="note">Details:</label>
+        <textarea id="note" name="note" rows="4" placeholder="Details..." th:field="*{details}"></textarea>
+
+        <input type="hidden" th:field="*{fulfilled}">
 
         <button type="submit">Programare</button>
     </form>
 </div>
+
+<!--[[${appointment.doctorProfile.id}]]-->
+
+<script>
+    document.getElementById('dateInput').addEventListener('change', function() {
+        var selectedDate = this.value;
+        var currentDate = new Date().toISOString().split('T')[0]; // Data curentă în format ISO
+
+        if (selectedDate < currentDate) {
+            alert("Nu poți selecta o dată anterioară celei curente!");
+            this.value = ""; // Resetați valoarea la un format gol sau puteți face alte acțiuni
+            return;
+        }
+
+        var formattedDate = new Date(selectedDate).toISOString().split('T')[0]; // Convertim data în format ISO
+
+        var doctorId = [[${appointment.doctorProfile.id}]]; // obține id-ul doctorului
+
+        fetch('/getAvailableHours?doctorId=' + doctorId + '&date=' + formattedDate)
+            .then(response => response.json())
+            .then(data => {
+                var select = document.getElementById('selectOptions');
+                select.innerHTML = ''; // Curăță opțiunile existente
+
+                var option = document.createElement('option');
+                option.text = 'Select an hour';
+                select.add(option);
+
+                data.forEach(function(hour) {
+                    var option = document.createElement('option');
+                    option.value = hour;
+                    option.text = hour;
+                    option.setAttribute('th:field', '*{appointmentHour}');
+                    select.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
+
 </body>
 </html>

@@ -46,4 +46,7 @@ public class DoctorProfile {
 
     @OneToMany(mappedBy = "doctorProfile", cascade = CascadeType.ALL, targetEntity = Appointment.class)
     private Set<Appointment> appointments;
+
+    @OneToMany(mappedBy = "doctorProfile", cascade = CascadeType.ALL, targetEntity = Prescription.class)
+    private Set<Prescription> prescriptions;
 }

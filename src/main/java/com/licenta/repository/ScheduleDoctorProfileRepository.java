@@ -21,6 +21,7 @@ public interface ScheduleDoctorProfileRepository extends JpaRepository<ScheduleD
     Schedule findByScheduleDay(@Param("scheduleDay") String scheduleDay);
 
     @Query("select sp.schedule from ScheduleDoctorProfile sp where sp.schedule.day = :scheduleDay and sp.doctorProfile.id = :doctorProfileId")
-    Schedule findByDoctorProfileAndScheduleDay(int doctorProfileId, String scheduleDay);
+    Schedule findByDoctorProfileIdAndScheduleDay(int doctorProfileId, String scheduleDay);
 
+    ScheduleDoctorProfile findByDoctorProfileId(int id);
 }

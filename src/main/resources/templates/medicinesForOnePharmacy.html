@@ -72,24 +72,42 @@
     <button type="submit">Search</button>
 </form>
 
-<div th:if="${#lists.size(medicines.content) > 0}" class="container-all-hospitals">
-    <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(medicines.content)-1)}">
+<div th:if="${#lists.size(entity.getProfiles().content) > 0}" class="container-all-hospitals">
+    <div class="hospital-box" th:each="index : ${#numbers.sequence(0, #lists.size(entity.getProfiles().content)-1)}">
         <div class="hospital-details">
-            <strong>Name: <p th:text="${medicines.content[index].name}" style="display: inline;"></p></strong>
+            <strong>Name: <p th:text="${entity.getProfiles().content[index].name}" style="display: inline;"></p></strong>
 
-            <strong><p>Form: </strong><span th:text="${medicines.content[index].pharmaceuticalForm}"></span></p>
-            <strong><p>Concentration: </strong><span th:text="${medicines.content[index].concentration}"></span></p>
-            <strong><p>Packaging: </strong><span th:text="${medicines.content[index].packaging}"></span></p>
-            <strong><p>Validity: </strong><span th:text="${medicines.content[index].validity}"></span></p>
-            <strong><p><span th:text="${medicines.content[index].price}"></span> RON</p></strong>
-            <strong><p>Indications:</strong> <span th:text="${medicines.content[index].indications}"></span></p>
-            <strong><p>Side Effects: </strong><span th:text="${medicines.content[index].sideEffects}"></span></p>
-            <strong><p>Volume: </strong><span th:text="${medicines.content[index].volume}"></span></p>
-            <p th:text="${medicines.content[index].prescriptionRequired ? 'You need prescription' : 'Prescription not required'}"></p>
+            <strong><p>Form: </strong><span th:text="${entity.getProfiles().content[index].pharmaceuticalForm}"></span></p>
+            <strong><p>Concentration: </strong><span th:text="${entity.getProfiles().content[index].concentration}"></span></p>
+            <strong><p>Packaging: </strong><span th:text="${entity.getProfiles().content[index].packaging}"></span></p>
+            <strong><p>Validity: </strong><span th:text="${entity.getProfiles().content[index].validity}"></span></p>
+            <strong><p><span th:text="${entity.getProfiles().content[index].price}"></span> RON</p></strong>
+            <strong><p>Indications:</strong> <span th:text="${entity.getProfiles().content[index].indications}"></span></p>
+            <strong><p>Side Effects: </strong><span th:text="${entity.getProfiles().content[index].sideEffects}"></span></p>
+            <strong><p>Volume: </strong><span th:text="${entity.getProfiles().content[index].volume}"></span></p>
+            <p th:text="${entity.getProfiles().content[index].prescriptionRequired ? 'You need prescription' : 'Prescription not required'}"></p>
         </div>
     </div>
 </div>
 
+<div th:if="${entity.getTotalPages() > 1}" class="div-spitale">
+    <ul class="pagination">
+        <li th:class="${entity.getCurrentPage() == 0 ? 'pagination-button disabled' : 'pagination-button'}">
+            <a th:href="@{/getMedicines(page=0)}">First</a>
+        </li>
+        <li th:class="${entity.getCurrentPage() > 0 ? 'pagination-button' : 'pagination-button disabled'}">
+            <a th:if="${entity.getCurrentPage() > 0}" th:href="@{/getMedicines(page=${entity.getCurrentPage() - 1})}">Previous</a>
+            <span th:if="${entity.getCurrentPage() == 0}">Previous</span>
+        </li>
+        <li th:class="${entity.getCurrentPage() < entity.getTotalPages() - 1 ? 'pagination-button' : 'pagination-button disabled'}">
+            <a th:if="${entity.getCurrentPage() < entity.getTotalPages() - 1}" th:href="@{/getMedicines(page=${entity.getCurrentPage() + 1})}">Next</a>
+            <span th:if="${entity.getCurrentPage() == entity.getTotalPages() - 1}">Next</span>
+        </li>
+        <li th:class="${entity.getCurrentPage() == entity.getTotalPages() - 1 ? 'pagination-button disabled' : 'pagination-button'}">
+            <a th:href="@{/getMedicines(page=${entity.getTotalPages() - 1})}" >Last</a>
+        </li>
+    </ul>
+</div>
 
 </body>
 </html>

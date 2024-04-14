@@ -3,6 +3,9 @@ package com.licenta.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Table
 @Entity
 @Data
@@ -11,11 +14,14 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean fulfilled;
+
     @Column(name = "appointment_date")
-    private String appointmentDate;
+    private LocalDate appointmentDate;
 
     @Column(name = "appointment_hour")
-    private String appointmentHour;
+    private LocalTime appointmentHour;
 
     private String details;
 
@@ -26,4 +32,13 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name="patient_id")
     private PatientProfile patientProfile;
+
+    public Appointment(DoctorProfile doctorProfile, PatientProfile patientProfile){
+        this.doctorProfile = doctorProfile;
+        this.patientProfile = patientProfile;
+    }
+
+    public Appointment(){}
+
+
 }

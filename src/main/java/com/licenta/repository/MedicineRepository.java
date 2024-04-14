@@ -13,6 +13,8 @@ public interface MedicineRepository extends JpaRepository<Medicines, Integer> {
     @Query("SELECT h from Medicines h WHERE LOWER(h.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     Page<Medicines> findByName(@Param("searchTerm") String search, Pageable pageable);
 
+    Medicines findByName(String name);
+
     Medicines findById(int id);
 
 }

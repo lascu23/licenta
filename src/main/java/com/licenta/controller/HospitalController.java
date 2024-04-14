@@ -6,6 +6,7 @@ import com.licenta.entity.User;
 import com.licenta.repository.DoctorProfileRepository;
 import com.licenta.repository.HospitalProfileRepository;
 import com.licenta.repository.UserRepository;
+import com.licenta.service.HospitalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.data.domain.Page;
@@ -27,47 +28,23 @@ import java.util.Optional;
 
 @Controller
 public class HospitalController {
-    @Autowired
-    private DoctorProfileRepository doctorProfileRepository;
 
     @Autowired
-    private HospitalProfileRepository hospitalProfileRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private HospitalServiceImpl hospitalService;
 
     @GetMapping("/hospitals") //afiseaza toate spitalele existente
     public String getHospitalsPagination(Model model, @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(required = false, name = "search")String search){
-        int pageSize = 15;
 
-        Page<HospitalProfile> hospitalProfiles;
+        model.addAttribute("entity", hospitalService.getHospitalsPagination(page, search));
 
-        if(StringUtils.hasText(search))
-            hospitalProfiles = hospitalProfileRepository.findByNameOrCity(search,PageRequest.of(page, pageSize));
-        else
-            hospitalProfiles = hospitalProfileRepository.findAll(PageRequest.of(page, pageSize));
-
-        List<String> imageList = new ArrayList<>();
-        for(HospitalProfile hospitalProfile : hospitalProfiles.getContent()){
-            String base64Image = Base64.getEncoder().encodeToString(hospitalProfile.getProfileImage());
-            imageList.add(base64Image);
-        }
-
-        model.addAttribute("base64Images", imageList);
-        model.addAttribute("hospitalProfiles", hospitalProfiles);
-        model.addAttribute("currentPage", hospitalProfiles.getNumber());
-        model.addAttribute("totalPages", hospitalProfiles.getTotalPages());
-        return "hospitalsPagination";
+        return "hospitals";
     }
 
     @PostMapping("/deleteHospital") //sterge un spital
     public String deleteHospital(@RequestParam("hospitalId") int id){
-        HospitalProfile hospitalProfile = hospitalProfileRepository.findById(id);
-        hospitalProfileRepository.deleteById(id);
-        userRepository.delete(userRepository.findById(hospitalProfile.getUser().getId()));
+        hospitalService.deleteHospital(id);
         return "redirect:/hospitals";
-
     }
 
 
