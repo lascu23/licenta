@@ -1,11 +1,8 @@
 package com.licenta.service;
 
 import com.licenta.dto.ShowCalendarDto;
-import com.licenta.entity.Appointment;
-import com.licenta.entity.DoctorProfile;
-import com.licenta.repository.AppointmentRepository;
-import com.licenta.repository.DoctorProfileRepository;
-import com.licenta.repository.UserRepository;
+import com.licenta.entity.*;
+import com.licenta.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +11,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,17 +21,23 @@ public class CalendarServiceImpl implements CalendarService{
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
     private final DoctorProfileRepository doctorProfileRepository;
+    private final PatientProfileRepository patientProfileRepository;
     private final UserServiceImpl userService;
+    private final PrescriptionRepository prescriptionRepository;
+    private final PrescriptionMedicineRepository prescriptionMedicineRepository;
 
-    public CalendarServiceImpl(AppointmentRepository appointmentRepository, UserRepository userRepository, DoctorProfileRepository doctorProfileRepository, UserServiceImpl userService) {
+    public CalendarServiceImpl(AppointmentRepository appointmentRepository, UserRepository userRepository, DoctorProfileRepository doctorProfileRepository, PatientProfileRepository patientProfileRepository, UserServiceImpl userService, PrescriptionRepository prescriptionRepository, PrescriptionMedicineRepository prescriptionMedicineRepository) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.doctorProfileRepository = doctorProfileRepository;
+        this.patientProfileRepository = patientProfileRepository;
         this.userService = userService;
+        this.prescriptionRepository = prescriptionRepository;
+        this.prescriptionMedicineRepository = prescriptionMedicineRepository;
     }
 
     @Override
-    public ShowCalendarDto createCalendar(int year, int month) {
+    public ShowCalendarDto createDoctorCalendar(int year, int month) {
         LocalDate today;
         if (year == 0 || month == 0) {
             today = LocalDate.now();
@@ -93,4 +97,47 @@ public class CalendarServiceImpl implements CalendarService{
             return ResponseEntity.badRequest().body("Failed to mark appointment as fulfilled: " + e.getMessage());
         }
     }
+
+
+    @Override
+    public List<Appointment> getPatientAppointmentsForCalendar() {
+        PatientProfile patientProfile = patientProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
+        return appointmentRepository.findAllByPatientProfileId(patientProfile.getId());
+    }
+
+
+    //leaga appointments de porescriptions using creation date
+    @Override
+    public List<PrescriptionMedicine> getPrescriptionsForPatient() {
+        PatientProfile patientProfile = patientProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
+        List<Prescription> prescriptions = prescriptionRepository.findAllByPatientProfileId(patientProfile.getId());
+        List<Integer> prescriptionsIds = new ArrayList<>(prescriptions.size());
+        for(Prescription prescription : prescriptions){
+            prescriptionsIds.add(prescription.getId());
+        }
+        List<PrescriptionMedicine> prescriptionMedicines = prescriptionMedicineRepository.findByPrescriptionIds(prescriptionsIds);
+        return prescriptionMedicines;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

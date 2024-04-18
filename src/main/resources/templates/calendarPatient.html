@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar Pacient</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        .container {
+            display: flex; /* Utilizăm flexbox */
+            flex-wrap: wrap; /* Permite div-urilor să se așeze pe mai multe linii */
+            gap: 20px; /* Spațiu între div-uri */
+
+        }
+        .appointment {
+            /*border: 1px solid #ccc;*/
+            padding: 10px;
+            width: 300px;
+            border: 2px solid black;
+            border-radius: 15px;
+        }
+        .appointment p {
+            margin: 5px 0;
+        }
+        h1 {
+            text-align: center;
+            width: fit-content;
+            margin: 20px auto 40px;
+        }
+        body{
+            background-color: #99d6ff;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <header>
+        <div th:replace="~{header :: header}">...</div>
+    </header>
+</div>
+
+<h1>All Appointments</h1>
+
+<div class="container justify-content-between">
+    <div class="row ">
+        <div th:each="appointment : ${appointments}" class="col-md-4">
+            <div class="appointment">
+                <div>
+                    <p><strong>When </strong> <span th:text="${appointment.appointmentDate} + ' ' + ${appointment.appointmentHour}"></span></p>
+                    <p><strong>Doctor: </strong> <span th:text="${appointment.doctorProfile.firstName} + ' ' + ${appointment.doctorProfile.lastName}"></span></p>
+                    <p><strong></strong> <span th:text="${appointment.details}"></span></p>
+                    <p><strong></strong> <span th:text="${appointment.fulfilled} ? 'Fulfilled' : 'Not Fulfilled'"></span></p>
+                </div>
+            </div>
+        </div>
+        <div th:each="prescription : ${prescriptions}">
+            <p th:text="${prescription.details}"></p>
+            <p th:text="${prescription.getMedicines().getName()}"></p>
+        </div>
+    </div>
+</div>
+
+<div>
+
+</div>
+</body>
+</html>

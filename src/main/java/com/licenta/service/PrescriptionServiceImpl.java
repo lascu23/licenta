@@ -9,6 +9,7 @@ import com.licenta.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
@@ -41,6 +42,7 @@ public class PrescriptionServiceImpl implements PrescriptionService{
         Prescription prescription = new Prescription();
         prescription.setDoctorProfile(doctorProfileRepository.findById(doctorId));
         prescription.setPatientProfile(patientProfileRepository.findById(patientId));
+        prescription.setCreationDate(LocalDate.now());
         prescriptionRepository.save(prescription);
 
         String[] array1 = prescriptionMedicineDto.getMedicineNames().get(0).split(",");
@@ -48,7 +50,6 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 
         for(int i = 0; i < array1.length; i++){
             Medicines medicines = medicineRepository.findByName(array1[i]);
-            System.out.println(medicines.toString());
             PrescriptionMedicineId prescriptionMedicineId = new PrescriptionMedicineId();
             prescriptionMedicineId.setPrescription(prescription);
             prescriptionMedicineId.setMedicine(medicines);

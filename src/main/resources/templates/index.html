@@ -36,7 +36,8 @@
                         <li><a href="/hospitals"><img src="/images/hospital.png" alt="Imagine">Hospitals</a></li>
                         <li><a href="/pharmacies"><img src="/images/pharmacy.png" alt="Imagine">Pharmacies</a></li>
                         <li><a href="/drugs"><img src="/images/pills.png" alt="Imagine">Drugs</a></li>
-                        <li><a href="/calendar"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
+                        <li sec:authorize="hasRole('ROLE_DOCTOR')"><a href="/calendarDoctor"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
+                        <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/calendarPatient"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
                         <li><a href="/prescriptions"><img src="/images/prescription.png" alt="Imagine">Prescriptions</a></li>
                     </ul>
                 </div>

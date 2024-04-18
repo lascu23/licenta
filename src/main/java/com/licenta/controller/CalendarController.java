@@ -1,34 +1,20 @@
 package com.licenta.controller;
 
-import com.licenta.dto.AppointmentDto;
-import com.licenta.dto.CalendarDto;
 import com.licenta.dto.ShowCalendarDto;
 import com.licenta.entity.Appointment;
-import com.licenta.entity.DoctorProfile;
-import com.licenta.entity.User;
-import com.licenta.repository.AppointmentRepository;
-import com.licenta.repository.DoctorProfileRepository;
-import com.licenta.repository.UserRepository;
+import com.licenta.entity.PatientProfile;
+import com.licenta.entity.Prescription;
+import com.licenta.entity.PrescriptionMedicine;
 import com.licenta.service.CalendarServiceImpl;
-import com.licenta.service.UserService;
 import com.licenta.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.YearMonth;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 @Controller
 public class CalendarController {
@@ -36,12 +22,14 @@ public class CalendarController {
     @Autowired
     private CalendarServiceImpl calendarService;
 
-    @GetMapping("/calendar")
-    public String showCalendar(@RequestParam(required = false, defaultValue = "0") int year,
+
+
+    @GetMapping("/calendarDoctor")
+    public String showDoctorCalendar(@RequestParam(required = false, defaultValue = "0") int year,
                                @RequestParam(required = false, defaultValue = "0") int month,
                                Model model) {
 
-        ShowCalendarDto calendarDto = calendarService.createCalendar(year, month);
+        ShowCalendarDto calendarDto = calendarService.createDoctorCalendar(year, month);
 
         model.addAttribute("calendar", calendarDto.getCalendar());
         model.addAttribute("currentMonthName", calendarDto.getCurrentMonthName());
@@ -49,7 +37,7 @@ public class CalendarController {
         model.addAttribute("currentMonth", calendarDto.getCurrentMonth());
         model.addAttribute("currentYear", calendarDto.getCurrentYear());
 
-        return "calendar";
+        return "calendarDoctor";
     }
 
     @GetMapping("/getAppointments")
@@ -62,4 +50,15 @@ public class CalendarController {
     public ResponseEntity<?> markAppointmentAsFulfilled(@PathVariable("id") int id) {
         return calendarService.markAppointmentAsFulfilled(id);
     }
+
+
+
+    @GetMapping("/calendarPatient")
+    public String getPatientCalendar(Model model){
+        model.addAttribute("appointments", calendarService.getPatientAppointmentsForCalendar());
+        model.addAttribute("prescriptions", calendarService.getPrescriptionsForPatient());
+        return "calendarPatient";
+    }
+
+
 }
