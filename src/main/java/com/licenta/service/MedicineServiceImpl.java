@@ -53,7 +53,6 @@ public class MedicineServiceImpl implements MedicineService{
         MedicinePharmacyProfile medicinePharmacyProfile = medicinePharmacyProfileRepository.findByMedicinesAndPharmacyProfile(medicines, pharmacyProfile);
 
         if (medicinePharmacyProfile == null) {
-            // Dacă nu există, creează o nouă înregistrare în tabela asociativă
             medicinePharmacyProfile = new MedicinePharmacyProfile();
             medicinePharmacyProfile.setId(idForPharmMed);
         }
@@ -88,11 +87,9 @@ public class MedicineServiceImpl implements MedicineService{
         List<MedicinePharmacyProfile> medicinePharmacyProfiles;
 
         if (StringUtils.hasText(search)) {
-            // Caută după nume dacă parametrul de căutare este furnizat
             medicinePharmacyProfiles = medicinePharmacyProfileRepository
                     .getMedicinePharmacyProfileByPharmacyProfileAndMedicineName(pharmacyProfile, search);
         } else {
-            // Altfel, obține toate medicamentele asociate farmaciei
             medicinePharmacyProfiles = medicinePharmacyProfileRepository
                     .getMedicinePharmacyProfileByPharmacyProfile(pharmacyProfile);
         }

@@ -1,19 +1,20 @@
 package com.licenta.service;
 
+import com.licenta.dto.AppointmentDto;
+import com.licenta.dto.PrescriptionMedicineDtoForPatientCalendar;
 import com.licenta.dto.ShowCalendarDto;
-import com.licenta.entity.Appointment;
-import com.licenta.entity.PrescriptionMedicine;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CalendarService {
     ShowCalendarDto createDoctorCalendar(int year, int month);
 
-    List<Appointment> getAppointments(int day, int currentMonth, int currentYear);
+    List<AppointmentDto> getAppointments(int day, int currentMonth, int currentYear);
 
     ResponseEntity<?> markAppointmentAsFulfilled(int id);
 
-    List<Appointment> getPatientAppointmentsForCalendar();
-    List<PrescriptionMedicine> getPrescriptionsForPatient();
+    List<AppointmentDto> getPatientAppointmentsForCalendar();
+    Map<AppointmentDto, List<PrescriptionMedicineDtoForPatientCalendar>> getPrescriptionsForPatient();
 }

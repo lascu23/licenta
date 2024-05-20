@@ -2,6 +2,8 @@ package com.licenta.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.print.Doc;
@@ -11,7 +13,8 @@ import java.util.Set;
 
 @Table
 @Entity
-@Data
+@Getter
+@Setter
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

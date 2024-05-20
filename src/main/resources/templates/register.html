@@ -5,18 +5,8 @@
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
-    <style>
-        #homeButton{
-            font-size: 35px;
-            color:#404040;
-            text-decoration: none;
-            color:black;
-        }
+    <link rel="stylesheet" type="text/css" href="/css/accounts.css">
 
-        body {
-            font-family: 'Afacad', sans-serif;
-        }
-    </style>
 </head>
 <body>
 
@@ -40,11 +30,16 @@
 
                                     <p class="alert alert-danger" role="alert" th:if="${param.fail}">There is already a user with this email!</p>
                                     <p class="alert alert-success" role="alert" th:if="${param.addAccount}">You have successfully created an account!</p>
+                                    <p class="alert alert-danger" role="alert" th:if="${param.failPassword}">Your passwords don't match!</p>
+                                    <p class="alert alert-danger" role="alert" th:if="${param.emailError}">Mail can not be empty!</p>
+                                    <p class="alert alert-danger" role="alert" th:if="${param.passwordError}">Password must have at least 8 characters!</p>
+                                    <p class="alert alert-danger" role="alert" th:if="${param.failPassword}">Your passwords don't match!</p>
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <input type="email" id="form3Example3c" required placeholder="Email" class="form-control" th:field="*{email}"/>
+                                            <p class="alert alert-danger" role="alert" th:errors="*{email}"></p>
                                         </div>
                                     </div>
 
@@ -54,6 +49,14 @@
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <input type="password" id="form3Example4c" required placeholder="Password" class="form-control" th:field="*{password}"/>
+                                            <p class="alert alert-danger" role="alert" th:errors="*{password}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <input type="password" id="form3Example5c" required placeholder="Repeat password" class="form-control" th:field="*{secondPassword}"/>
                                         </div>
                                     </div>
 

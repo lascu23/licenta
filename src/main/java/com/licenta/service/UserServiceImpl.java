@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,7 +37,7 @@ public class UserServiceImpl implements UserService {
     private PharmacyProfileRepository pharmacyProfileRepository;
 
 
-    @Override //returneaza user ul logat
+    @Override
     public User getAuthenticationUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName());

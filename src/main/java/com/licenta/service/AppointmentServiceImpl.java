@@ -32,7 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         this.scheduleDoctorProfileRepository = scheduleDoctorProfileRepository;
     }
 
-    @Override //poti crea o programare la doctor
+    @Override
     public Appointment makeAppointment(HttpServletRequest request) {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -46,13 +46,12 @@ public class AppointmentServiceImpl implements AppointmentService{
         return new Appointment(doctorProfile, patientProfile);
     }
 
-    @Override //obtine orele disponibile
+    @Override
     public List<LocalTime> getAvailableHours(int doctorId, LocalDate date) {
         String appointmentDay = date.getDayOfWeek().name();
         Schedule schedule= scheduleDoctorProfileRepository.findByDoctorProfileIdAndScheduleDay(doctorId, appointmentDay);
         LocalTime startHour = schedule.getStartHour();
         LocalTime endHour = schedule.getEndHour();
-        //LocalTime currentHour = startHour;
         List<LocalTime> availableHours = new ArrayList<>();
 
         List<Appointment> appointmentList = appointmentRepository.findAllByDoctorProfileIdAndAppointmentDate(doctorId, date);
@@ -69,7 +68,6 @@ public class AppointmentServiceImpl implements AppointmentService{
             index++;
         }
 
-        // Adăugăm orarul disponibil până la sfârșitul intervalului, dacă este cazul
         while (currentHour.isBefore(endHour)) {
             availableHours.add(currentHour);
             currentHour = currentHour.plusMinutes(30);
@@ -78,7 +76,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return availableHours;
     }
 
-    @Override//salveaza programarea
+    @Override
     public void saveAppointment(Appointment appointment) {
         appointmentRepository.save(appointment);
     }

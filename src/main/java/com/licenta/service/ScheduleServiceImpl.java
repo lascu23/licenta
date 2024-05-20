@@ -6,9 +6,6 @@ import com.licenta.EmbeddedKeys.SchedulePharmacyProfileId;
 import com.licenta.dto.ScheduleDto;
 import com.licenta.entity.*;
 import com.licenta.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

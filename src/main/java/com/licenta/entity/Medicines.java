@@ -2,13 +2,16 @@ package com.licenta.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Table
 @Entity
-@Data
+@Getter
+@Setter
 public class Medicines {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

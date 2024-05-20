@@ -1,19 +1,14 @@
 package com.licenta.controller;
 
+import com.licenta.dto.AppointmentDto;
 import com.licenta.dto.ShowCalendarDto;
-import com.licenta.entity.Appointment;
-import com.licenta.entity.PatientProfile;
-import com.licenta.entity.Prescription;
-import com.licenta.entity.PrescriptionMedicine;
 import com.licenta.service.CalendarServiceImpl;
-import com.licenta.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -42,7 +37,7 @@ public class CalendarController {
 
     @GetMapping("/getAppointments")
     @ResponseBody
-    public List<Appointment> getAppointments(@RequestParam int day, @RequestParam int currentMonth, @RequestParam int currentYear){
+    public List<AppointmentDto> getAppointments(@RequestParam int day, @RequestParam int currentMonth, @RequestParam int currentYear){
         return calendarService.getAppointments(day, currentMonth, currentYear);
     }
 
@@ -55,8 +50,7 @@ public class CalendarController {
 
     @GetMapping("/calendarPatient")
     public String getPatientCalendar(Model model){
-        model.addAttribute("appointments", calendarService.getPatientAppointmentsForCalendar());
-        model.addAttribute("prescriptions", calendarService.getPrescriptionsForPatient());
+        model.addAttribute("appsAndMed", calendarService.getPrescriptionsForPatient());
         return "calendarPatient";
     }
 

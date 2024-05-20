@@ -29,13 +29,13 @@ public class ProfileServiceImpl implements ProfileService {
     private final SchedulePharmacyProfileRepository schedulePharmacyProfileRepository;
     private final ScheduleHospitalProfileRepository scheduleHospitalProfileRepository;
     private final ScheduleDoctorProfileRepository scheduleDoctorProfileRepository;
-
     private final UserServiceImpl userService;
+    private final AppointmentRepository appointmentRepository;
 
     public ProfileServiceImpl(UserRepository userRepo, PatientProfileRepository patientProfRepo,
                               DoctorProfileRepository doctorProfRepo, PharmacyProfileRepository pharmacyProfRepo,
                               HospitalProfileRepository hospitalProfRepo, SchedulePharmacyProfileRepository schedulePharmacyProfRepo,
-                              ScheduleHospitalProfileRepository schedHospitalProfRepo, ScheduleDoctorProfileRepository schedDoctorProfRepo, UserServiceImpl userService) {
+                              ScheduleHospitalProfileRepository schedHospitalProfRepo, ScheduleDoctorProfileRepository schedDoctorProfRepo, UserServiceImpl userService, AppointmentRepository appointmentRepository) {
         this.userRepository = userRepo;
         this.patientProfileRepository = patientProfRepo;
         this.doctorProfileRepository = doctorProfRepo;
@@ -45,10 +45,11 @@ public class ProfileServiceImpl implements ProfileService {
         this.scheduleHospitalProfileRepository = schedHospitalProfRepo;
         this.scheduleDoctorProfileRepository = schedDoctorProfRepo;
         this.userService = userService;
+        this.appointmentRepository = appointmentRepository;
     }
 
 
-    @Override //afiseaza profilul pacientului logat
+    @Override
     public PatientProfile showLoggedInPatientProfile() {
         User userLoggedIn = userService.getAuthenticationUser();
 
@@ -60,7 +61,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 
 
-    @Override//salveaza orice modificare adusa profilului
+    @Override
     public void savePatientProfile(PatientProfile patientProfile) {
         PatientProfile existingProfile =patientProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
         if( existingProfile == null){
@@ -77,7 +78,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
-    @Override//sterge contul unui pacient
+    @Override
     public void deleteAccount(String email, HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
@@ -101,7 +102,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
     }
 
-    @Override //afiseaza profilul unei entitati in functie de logare
+    @Override
     public ScheduleDtoUserAndPhotoDto<?> getProfile(ArrayList<Schedule> schedules) {
 
         User userLoggedIn = userService.getAuthenticationUser();
@@ -163,7 +164,7 @@ public class ProfileServiceImpl implements ProfileService {
         throw new IllegalStateException("Profilul nu poate fi determinat pentru utilizatorul cu id-ul " + userLoggedIn.getId());
     }
 
-    @Override// din lista tuturor spitalelor, daca apas pe unu ma duce sa i vad pagina de profil
+    @Override
     public ScheduleUserAndPhotoDto<HospitalProfile> getHospitalProfileFromUserPerspective(String hospital, String address) {
         HospitalProfile hospitalProfile = hospitalProfileRepository.findByNameAndAddress(hospital, address);
         String base64Image = Base64.getEncoder().encodeToString(hospitalProfile.getProfileImage());
@@ -177,7 +178,7 @@ public class ProfileServiceImpl implements ProfileService {
         return scheduleUserAndPhotoDto;
     }
 
-    @Override// din lista tuturor doctorilor, daca apas pe unu ma duce sa i vad pagina de profil
+    @Override
     public ScheduleUserAndPhotoDto<DoctorProfile> getDoctorProfileFromUserPerspective(String firstName, String lastName, String specialty) {
         DoctorProfile doctorProfile = doctorProfileRepository.findByFirstNameAndLastNameAndSpecialty(firstName, lastName, specialty);
         String base64Image = Base64.getEncoder().encodeToString(doctorProfile.getProfileImage());
@@ -191,7 +192,7 @@ public class ProfileServiceImpl implements ProfileService {
         return scheduleUserAndPhotoDto;
     }
 
-    @Override // din lista tuturor farmaciilor, daca apas pe unu ma duce sa i vad pagina de profil
+    @Override
     public ScheduleUserAndPhotoDto<PharmacyProfile> getPharmacyProfileFromUserPerspective(String name, String address) {
         PharmacyProfile pharmacyProfile = pharmacyProfileRepository.findByNameAndAddress(name, address);
         String base64Image = Base64.getEncoder().encodeToString(pharmacyProfile.getProfileImage());

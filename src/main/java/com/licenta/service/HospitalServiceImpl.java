@@ -30,7 +30,7 @@ public class HospitalServiceImpl implements HospitalService{
 
     @Override
     public EntityPaginationDto<HospitalProfile> getHospitalsPagination(int page, String search) {
-        int pageSize = 15;
+        int pageSize = 9;
 
         Page<HospitalProfile> hospitalProfiles;
 

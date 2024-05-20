@@ -1,19 +1,17 @@
 package com.licenta.service;
 
+import com.licenta.dto.AppointmentDto;
+import com.licenta.dto.PrescriptionMedicineDtoForPatientCalendar;
 import com.licenta.dto.ShowCalendarDto;
 import com.licenta.entity.*;
 import com.licenta.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 public class CalendarServiceImpl implements CalendarService{
@@ -58,7 +56,7 @@ public class CalendarServiceImpl implements CalendarService{
 
         List<List<Integer>> calendar = new ArrayList<>();
         int daysInMonth = today.lengthOfMonth();
-        int firstDayOfMonth = today.withDayOfMonth(1).getDayOfWeek().getValue() - 1; // Adjust for zero-based index
+        int firstDayOfMonth = today.withDayOfMonth(1).getDayOfWeek().getValue() - 1;
         int currentDay = 1;
 
         for (int i = 0; i < 6; i++) {
@@ -80,11 +78,18 @@ public class CalendarServiceImpl implements CalendarService{
     }
 
     @Override
-    public List<Appointment> getAppointments(int day, int currentMonth, int currentYear) {
+    public List<AppointmentDto> getAppointments(int day, int currentMonth, int currentYear) {
         DoctorProfile doctorProfile = doctorProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
         LocalDate localDate = LocalDate.of(currentYear, currentMonth, day);
-        return appointmentRepository.findAllByDoctorProfileIdAndAppointmentDate(doctorProfile.getId(), localDate);
+        List<Appointment> appointments = appointmentRepository.findAllByDoctorProfileIdAndAppointmentDate(doctorProfile.getId(), localDate);
+        List<AppointmentDto> appointmentDtos = new ArrayList<>(appointments.size());
+        for(Appointment appointment : appointments){
+            appointmentDtos.add(getAppointmentDtoFromAppointment(appointment));
+        }
+        return appointmentDtos;
     }
+
+
 
     @Override
     public ResponseEntity<?> markAppointmentAsFulfilled(int id) {
@@ -100,23 +105,49 @@ public class CalendarServiceImpl implements CalendarService{
 
 
     @Override
-    public List<Appointment> getPatientAppointmentsForCalendar() {
+    public List<AppointmentDto> getPatientAppointmentsForCalendar() {
         PatientProfile patientProfile = patientProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
-        return appointmentRepository.findAllByPatientProfileId(patientProfile.getId());
+        List<Appointment> appointments = appointmentRepository.findAllByPatientProfileIdOrderByAppointmentDate(patientProfile.getId());
+        List<AppointmentDto> appointmentDtos = new ArrayList<>(appointments.size());
+        for(Appointment appointment : appointments){
+            appointmentDtos.add(getAppointmentDtoFromAppointment(appointment));
+        }
+        return appointmentDtos;
+    }
+
+    private AppointmentDto getAppointmentDtoFromAppointment(Appointment appointment){
+        AppointmentDto appointmentDto = new AppointmentDto();
+        appointmentDto.setAppointmentDate(appointment.getAppointmentDate());
+        appointmentDto.setAppointmentHour(appointment.getAppointmentHour());
+        appointmentDto.setFulfilled(appointment.isFulfilled());
+        appointmentDto.setDetails(appointment.getDetails());
+        appointmentDto.setPatientLastName(appointment.getPatientProfile().getLastName());
+        appointmentDto.setPatientFirstName(appointment.getPatientProfile().getFirstName());
+        appointmentDto.setDoctorLastName(appointment.getDoctorProfile().getLastName());
+        appointmentDto.setDoctorFirstName(appointment.getDoctorProfile().getFirstName());
+        appointmentDto.setId(appointment.getId());
+        return appointmentDto;
     }
 
 
-    //leaga appointments de porescriptions using creation date
     @Override
-    public List<PrescriptionMedicine> getPrescriptionsForPatient() {
+    public Map<AppointmentDto, List<PrescriptionMedicineDtoForPatientCalendar>> getPrescriptionsForPatient() {
         PatientProfile patientProfile = patientProfileRepository.findByUserId(userService.getAuthenticationUser().getId());
-        List<Prescription> prescriptions = prescriptionRepository.findAllByPatientProfileId(patientProfile.getId());
-        List<Integer> prescriptionsIds = new ArrayList<>(prescriptions.size());
-        for(Prescription prescription : prescriptions){
-            prescriptionsIds.add(prescription.getId());
+        List<Appointment> appointments = appointmentRepository.findAllByPatientProfileIdOrderByAppointmentDate(patientProfile.getId());
+        Map<AppointmentDto, List<PrescriptionMedicineDtoForPatientCalendar>> map = new HashMap<>();
+
+        for(Appointment appointment : appointments){
+            if(!map.containsKey(getAppointmentDtoFromAppointment(appointment))){
+                Prescription prescription = prescriptionRepository.findByAppointment(appointment);
+                List<PrescriptionMedicine> prescriptionMedicines = prescriptionMedicineRepository.findByPrescription(prescription);
+                List<PrescriptionMedicineDtoForPatientCalendar> prescriptionMedicineDtos = new ArrayList<>();
+                for(PrescriptionMedicine prescriptionMedicine : prescriptionMedicines){
+                    prescriptionMedicineDtos.add(new PrescriptionMedicineDtoForPatientCalendar(prescriptionMedicine.getMedicines().getName(), prescriptionMedicine.getDetails()));
+                }
+                map.put(getAppointmentDtoFromAppointment(appointment), prescriptionMedicineDtos);
+            }
         }
-        List<PrescriptionMedicine> prescriptionMedicines = prescriptionMedicineRepository.findByPrescriptionIds(prescriptionsIds);
-        return prescriptionMedicines;
+        return map;
     }
 
 }

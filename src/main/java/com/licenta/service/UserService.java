@@ -7,7 +7,6 @@ public interface UserService {
     void saveUser(RegistrationDto registrationDto);
     User findByEmail(String email);
 
-    //void saveHospitalOrPharmacy(RegistrationAndRoleDto registrationAndRoleDto);
     void saveHospitalUserAndProfile(HospitalProfileDto hospitalProfileDto);
     void savePharmacyUserAndProfile(PharmacyDto pharmacyDto);
     void saveDoctorUserAndProfile(DoctorDto doctorDto);

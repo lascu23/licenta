@@ -6,10 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class User {
     @Id
@@ -24,7 +27,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name="role_id")
-    //role_id e numele cheii straine din baza de date
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, targetEntity = PharmacyProfile.class)

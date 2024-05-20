@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PrescriptionService {
     PrescriptionMedicineDto createPrescription();
 
-    void savePrescription(PrescriptionMedicineDto prescriptionMedicineDto, int doctorId,  int patientId);
+    void savePrescription(PrescriptionMedicineDto prescriptionMedicineDto, int id);
 }

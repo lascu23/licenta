@@ -13,10 +13,10 @@ body {
 
 
 .hospital-box {
-    border: 2px solid #66c2ff;/* Calculează lățimea pentru a ocupa 33%, lăsând un spațiu de 20px între elemente */
+    border: 2px solid #66c2ff;
     border-radius: 10px;
     width: calc(33% - 20px);
-    box-sizing: border-box; /* Include marginile și paddingul în lățimea totală a div-ului */
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -61,7 +61,7 @@ button {
     margin-left: 2px;
 }
 
-/* Stilizare butoane de paginare */
+
 .pagination-button {
     display: inline-block;
     padding: 8px 16px;
@@ -90,8 +90,8 @@ a{
 .pagination {
     display: flex;
     justify-content: space-around;
-    list-style-type: none; /* Elimină stilul implicit al listei */
-    padding: 0; /* Elimină marginile implicite ale listei */
+    list-style-type: none;
+    padding: 0;
     width: 1000px;
 }
 

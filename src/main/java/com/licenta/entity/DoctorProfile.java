@@ -1,31 +1,24 @@
 package com.licenta.entity;
 
+import com.licenta.common.PersonalData;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "doctor_profile")
-public class DoctorProfile {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-
-    private String lastName;
-
-    private String birthday;
-
+public class DoctorProfile extends PersonalData {
     @Column(name = "profile_picture")
     private byte[] profileImage;
 
@@ -47,6 +40,4 @@ public class DoctorProfile {
     @OneToMany(mappedBy = "doctorProfile", cascade = CascadeType.ALL, targetEntity = Appointment.class)
     private Set<Appointment> appointments;
 
-    @OneToMany(mappedBy = "doctorProfile", cascade = CascadeType.ALL, targetEntity = Prescription.class)
-    private Set<Prescription> prescriptions;
 }

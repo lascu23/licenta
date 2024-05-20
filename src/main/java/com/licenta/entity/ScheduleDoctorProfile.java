@@ -4,12 +4,15 @@ import com.licenta.EmbeddedKeys.ScheduleDoctorProfileId;
 import com.licenta.EmbeddedKeys.ScheduleHospitalProfileId;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.print.Doc;
 
 @Table(name = "doctor_schedule")
 @Entity
-@Data
+@Getter
+@Setter
 public class ScheduleDoctorProfile {
     @EmbeddedId
     private ScheduleDoctorProfileId id;

@@ -20,4 +20,11 @@ public interface DoctorProfileRepository extends JpaRepository<DoctorProfile, In
     DoctorProfile findById(int id);
     DoctorProfile findByFirstNameAndLastNameAndSpecialty(String firstName, String lastName, String specialty);
 
+    @Query("SELECT d, AVG(r.grade) AS avgGrade " +
+            "FROM DoctorProfile d " +
+            "JOIN d.appointments a " +
+            "JOIN a.review r " +
+            "GROUP BY d.id " +
+            "ORDER BY avgGrade DESC")
+    List<Object[]> findDoctorByBestAverageRating();
 }

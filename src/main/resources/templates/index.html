@@ -3,48 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>MedManager</title>
-    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"  href="/css/index.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
+
 </head>
 <body>
 
+<div>
+    <header>
+        <div th:replace="~{header :: header}">...</div>
+    </header>
+</div>
+
+
+<div class="sidebar-container">
     <div>
-        <header>
-            <div th:replace="~{header :: header}">...</div>
-        </header>
-    </div>
-
-
-    <!-- Link catre stickere-->
-    <nav>
-        <div >
-            <div class="containerLinkuri">
-                <div class="containerInchis">
-                    <ul>
-                        <li sec:authorize="hasAnyRole('ROLE_HOSPITAL', 'ROLE_ADMIN')"><a th:href="@{/addDoctorAccount}"><img src="/images/user (1).png" alt="Image">Add a Doctor</a></li>
-                        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addHospitalAccount}"><img src="/images/user (1).png" alt="Image">Add a Hospital</a></li>
-                        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addPharmacyAccount}"><img src="/images/user (1).png" alt="Image">Add a Pharmacy</a></li>
-                        <li th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" sec:authorize="isAuthenticated() and !hasRole('ROLE_PATIENT')">
-                            <a th:href="@{/profile}"><img src="/images/user (1).png" alt="Image">Profile</a>
-                        </li>
-                        <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/profilePatient"><img src="/images/user (1).png" alt="Image">Profile</a></li>
-                        <li sec:authorize="hasAnyRole('ROLE_PHARMACY', 'ROLE_ADMIN')"><a href="/getMedicines"><img src="/images/pills.png" alt="Image">Medicines</a></li>
-                        <li><a href="/doctors"><img src="/images/doctor.png" alt="Imagine">Doctors</a></li>
-                        <li><a href="/hospitals"><img src="/images/hospital.png" alt="Imagine">Hospitals</a></li>
-                        <li><a href="/pharmacies"><img src="/images/pharmacy.png" alt="Imagine">Pharmacies</a></li>
-                        <li><a href="/drugs"><img src="/images/pills.png" alt="Imagine">Drugs</a></li>
-                        <li sec:authorize="hasRole('ROLE_DOCTOR')"><a href="/calendarDoctor"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
-                        <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/calendarPatient"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
-                        <li><a href="/prescriptions"><img src="/images/prescription.png" alt="Imagine">Prescriptions</a></li>
-                    </ul>
+        <nav class="navLinkuri">
+            <div>
+                <div class="containerLinkuri">
+                    <div class="containerInchis">
+                        <ul>
+                            <li sec:authorize="hasAnyRole('ROLE_HOSPITAL')"><a th:href="@{/addDoctorAccount}"><img src="/images/user (1).png" alt="Image">Add Doctor</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addHospitalAccount}"><img src="/images/user (1).png" alt="Image">Add Hospital</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/addPharmacyAccount}"><img src="/images/user (1).png" alt="Image">Add Pharmacy</a></li>
+                            <li th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" sec:authorize="isAuthenticated() and !hasRole('ROLE_PATIENT')">
+                                <a th:href="@{/profile}"><img src="/images/user (1).png" alt="Image">Profile</a>
+                            </li>
+                            <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/profilePatient"><img src="/images/user (1).png" alt="Image">Profile</a></li>
+                            <li sec:authorize="hasAnyRole('ROLE_PHARMACY', 'ROLE_ADMIN')"><a href="/getMedicines"><img src="/images/pills.png" alt="Image">Medicines</a></li>
+                            <li><a href="/doctors"><img src="/images/doctor.png" alt="Imagine">Doctors</a></li>
+                            <li><a href="/hospitals"><img src="/images/hospital.png" alt="Imagine">Hospitals</a></li>
+                            <li><a href="/pharmacies"><img src="/images/pharmacy.png" alt="Imagine">Pharmacies</a></li>
+                            <li sec:authorize="hasRole('ROLE_DOCTOR')"><a href="/calendarDoctor"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
+                            <li sec:authorize="hasRole('ROLE_PATIENT')"><a href="/calendarPatient"><img src="/images/schedule.png" alt="Imagine">Calendar</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
+    <div class="doctor-info-container" th:if="${#lists.size(firstNames)!=0}">
+        <div th:each="index : ${#numbers.sequence(0, firstNames.size()-1)}" class="doctor-info">
+            <div class="doctor-details">
+                <img class="avatar" th:src="'data:image/png;base64,' + ${profilePics[index]}" alt="avatar">
+                <div class="text-details">
+                    <span class="name" th:text="${firstNames[index] + ' ' + lastNames[index]}"></span>
+                </div>
+                <div>
+                    <span class="hospital-name" th:text="${hospitalProfilesNames[index]}"></span>
+                    <span>, </span>
+                    <span class="hospital-address" th:text="${hospitalProfilesAddresses[index]}"></span>
+                </div>
+                <p>Reviews: <span th:text="${reviews[index]}"></span> stars</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
+
+
+
+

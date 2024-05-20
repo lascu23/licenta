@@ -33,7 +33,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public EntityPaginationDto<DoctorProfile> getDoctorsPagination(int page, String search) {
-        int pageSize = 15;
+        int pageSize = 9;
 
         Page<DoctorProfile> doctorProfiles;
 

@@ -24,8 +24,8 @@ public class PrescriptionController {
     }
 
     @PostMapping("/savePrescription")
-    public String savePrescription(@ModelAttribute PrescriptionMedicineDto prescriptionMedicineDto,@RequestParam int doctorId, @RequestParam int patientId){
-        prescriptionService.savePrescription(prescriptionMedicineDto, doctorId, patientId);
+    public String savePrescription(@ModelAttribute PrescriptionMedicineDto prescriptionMedicineDto,@RequestParam("appointmentId") int id){
+        prescriptionService.savePrescription(prescriptionMedicineDto, id);
         return "redirect:/calendarDoctor";
     }
 }

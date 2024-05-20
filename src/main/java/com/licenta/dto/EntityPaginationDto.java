@@ -2,11 +2,14 @@ package com.licenta.dto;
 
 import com.licenta.entity.DoctorProfile;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class EntityPaginationDto<T> {
     private List<String> profileImages;
     private Page<T> profiles;

@@ -3,11 +3,14 @@ package com.licenta.entity;
 import com.licenta.EmbeddedKeys.MedicinePharmacyProfileId;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "pharmacy_medicine")
-@Data
+@Getter
+@Setter
 public class MedicinePharmacyProfile {
     @EmbeddedId
     private MedicinePharmacyProfileId id;

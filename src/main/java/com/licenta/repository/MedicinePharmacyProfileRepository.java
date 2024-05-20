@@ -13,6 +13,7 @@ public interface MedicinePharmacyProfileRepository extends JpaRepository<Medicin
     MedicinePharmacyProfile findByMedicinesAndPharmacyProfile(Medicines medicines, PharmacyProfile pharmacyProfile);
 
     List<MedicinePharmacyProfile> getMedicinePharmacyProfileByPharmacyProfile(PharmacyProfile pharmacyProfile);
+    List<MedicinePharmacyProfile> getMedicinePharmacyProfileByMedicinesName( String name);
 
     @Query("SELECT mpp FROM MedicinePharmacyProfile mpp " +
             "JOIN mpp.medicines m " +

@@ -3,10 +3,13 @@ package com.licenta.entity;
 import com.licenta.EmbeddedKeys.ScheduleHospitalProfileId;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Table(name = "hospital_schedule")
 @Entity
-@Data
+@Getter
+@Setter
 public class ScheduleHospitalProfile {
     @EmbeddedId
     private ScheduleHospitalProfileId id;

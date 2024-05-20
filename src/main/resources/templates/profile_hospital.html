@@ -2,41 +2,10 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Profil</title>
+    <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Afacad">
-
-    <style>
-        body {
-            font-family: 'Afacad', sans-serif;
-            background-color: #99d6ff;
-        }
-        #homeButton{
-            text-decoration: none;
-            color:black;
-        }
-        .custom-rounded {
-            border-radius: 20%; /* Ajustați procentajul pentru a obține aspectul dorit */
-            overflow: hidden; /* Asigurați-vă că imaginea este tăiată la forma pătrată */
-            width: 350px;
-            height: 200px;
-        }
-
-        .containerSchedule {
-            display: flex;
-            flex-direction: column; /* Așezare verticală a divurilor */
-        }
-        .schedule {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 coloane egale */
-            /*gap: 1px; !* Spațiu între coloane *!*/
-            margin-bottom: 3px; /* Spațiu între divuri */
-            justify-content: center; /* Aliniere la mijloc */
-        }
-        .schedule p {
-            margin: 0; /* Eliminăm marginile implicite ale paragrafelor */
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/profile.css">
 </head>
 <body>
 
@@ -59,7 +28,7 @@
                         <img th:src="'data:image/png;base64,' + ${profilePicture}" alt="avatar"
                              class="custom-rounded" >
                     </div>
-                    <div sec:authorize="hasRole('ROLE_HOSPITAL')">
+                    <div sec:authorize="hasRole('ROLE_HOSPITAL')" th:if="${request == '/profile'}">
                         <form th:action="@{/schedule/save}" th:object="${form}" method="post" >
                             <div class="containerSchedule">
                                 <div th:each="schedule, itemStat : *{schedules}"  class="schedule" style="margin-left:50px;">
@@ -76,7 +45,7 @@
                             </div>
                         </form>
                     </div>
-                    <div sec:authorize="!hasRole('ROLE_HOSPITAL')" class="containerSchedule">
+                    <div th:if="${request != '/profile'}" class="containerSchedule">
                         <div th:each="schedule : *{form}" class="schedule" style="margin-left:50px;">
                             <p th:text="${schedule.getDay()}" ></p>
                             <p th:text="${schedule.getStartHour()}"></p>

@@ -1,8 +1,11 @@
 package com.licenta.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CalendarDto {
     private int year;
     private int month;

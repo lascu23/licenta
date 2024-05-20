@@ -4,42 +4,11 @@
     <title>Prescription Form</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/prescription.css">
+    <script src="/js/prescription.js" defer></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #99d6ff;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            height: 100px;
-            resize: none;
-        }
-
-        button[type="button"] {
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -59,43 +28,13 @@
                 <textarea class="form-control" th:field="*{details[__${medicineIndex.index}__]}" placeholder="Details.."></textarea>
             </div>
         </div>
-        <input type="hidden" th:name="doctorId" th:value="${param.doctorId}">
-        <input type="hidden" th:name="patientId" th:value="${param.patientId}">
+        <input type="hidden" th:name="appointmentId" th:value="${param.appointmentId}">
 
         <button type="button" class="btn btn-primary" onclick="addMedicineField()">Add Medicine</button>
         <br/><br/>
         <button type="submit" class="btn btn-success">Submit</button>
     </form>
 </div>
-
-<script th:inline="javascript">
-    var medicineIndex = 0; // Index pentru numele medicamentului
-
-    function addMedicineField() {
-        var medicineDiv = document.createElement("div");
-        var medicineInput = document.createElement("input");
-        var detailsInput = document.createElement("textarea");
-        var br = document.createElement("br");
-
-        medicineInput.setAttribute("type", "text");
-        medicineInput.setAttribute("name", "medicineNames[" + medicineIndex + "]");
-        medicineInput.setAttribute("class", "form-control");
-        medicineInput.setAttribute("placeholder", "Medicine Name");
-
-        detailsInput.setAttribute("type", "text");
-        detailsInput.setAttribute("name", "details[" + medicineIndex + "]");
-        detailsInput.setAttribute("class", "form-control");
-        detailsInput.setAttribute("placeholder", "Details");
-
-        medicineDiv.appendChild(medicineInput);
-        medicineDiv.appendChild(detailsInput);
-        medicineDiv.appendChild(br);
-
-        document.getElementsByTagName("form")[0].insertBefore(medicineDiv, document.getElementsByTagName("button")[0]);
-
-        medicineIndex++; // Incrementăm indexul pentru a face numele câmpului următor unic
-    }
-</script>
 
 </body>
 </html>
