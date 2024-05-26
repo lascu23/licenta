@@ -118,7 +118,7 @@
                             <div class="col-sm-3">
                                 <p class="mb-0">Review</p>
                             </div>
-                            <div class="col-sm-9">
+                            <div th:if="${review != null}" class="col-sm-9">
                                 <p th:text="${review.getDescriptionGrade() } + ' ' +  ${review.getGrade()} + ' ' + stars"></p>
                             </div>
                         </div>
